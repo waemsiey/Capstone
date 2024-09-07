@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-
-
 @Controller
 @RequestMapping("/")
 public class userController {
@@ -44,26 +42,15 @@ public class userController {
                 Model model) throws Exception {
         
         Optional<users> userOptional = userservice.findByEmail(user.getEmail());
-
-        if (userOptional.isPresent()) {
-            model.addAttribute("message", user.getEmail() + " already exists");
-            return "signup";
-        }
-
-        if (!user.getPassword().equals(passwordConfirm)) {
-            model.addAttribute("message", "Passwords do not match!");
-            return "signup";
-        }
         try {
             userservice.addNewUser(user, passwordConfirm);
             model.addAttribute("message", "User registered successfully!");
-            return "home";
+            return "Client/home";
         } catch (Exception e) {
-            model.addAttribute("message", "An error occurred while registering the user. Please try again.");
+            model.addAttribute("message", e.getMessage());
             return "signup";
         }
     }
-
     @GetMapping("/login")
     public String viewLoginpage(Model model){
         model.addAttribute("user", new users());
@@ -75,13 +62,30 @@ public class userController {
         Optional<users> loginUser = userservice.loginUser(user.getEmail(), user.getPassword());
         if(loginUser.isPresent()){
             model.addAttribute("message","Login Succesfully");
-            return "home";
+            return "Client/home";
         }
         else {
             model.addAttribute("message", "Email not found!");
             return "login";
         }
     }
+
+    @GetMapping("/account")
+    public String account() {
+        return "account"; //html file
+    }
+
+    @GetMapping("/logout")
+    public String logout() {
+        return "Client/home"; //html file
+    }
+
+    @GetMapping("/help")
+    public String help() {
+       
+        return "help"; //html file
+    }
+    
 // for postmantestingusers
     @PostMapping("/api/login")
     @ResponseBody 

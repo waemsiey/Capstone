@@ -16,20 +16,24 @@
         crossorigin="anonymous">
 
         <link th:href="@{/css/styles.css}" rel="stylesheet"  />
-        <title>Products</title>
+        <title>ENY Prints | Online</title>
     </head>
     <body>
-        <div th:fragment="header" th:insert="~{navbarfragment :: header}"></div>
+        <div th:fragment="header" th:insert="~{Client/navbarfragment :: header}"></div>
+        
+    <form action method="post" >
 
-        <h2>All Products</h2>
         <div class="product-grid">
             <div class="product" th:each="product : ${products}">
-                <!-- <img th:src="@{${product.imageUrl}}" alt="Product Image"> -->
-                <h3 th:text="${product.name}">Product Name</h3>
-                <p th:text="${product.description}">Product Description</p>
-                <p th:text="${product.price}">Price</p>
+                <a th:href ="@{/product/{id}(id= ${product.prodID})}"></a>
+                <img th:src="${product.imgURL}" alt="Product Image" width="100">
+                <h3 th:text="${product.prodName}">Product Name</h3>
+                <p th:text="${product.prodDescription}">Product Description</p>
+                <!-- <p th:text="${product.price}">Price</p> -->
                 <p th:text="${product.category}">Category</p>
             </div>
         </div>
+    </form>
+
     </body>
     </html>

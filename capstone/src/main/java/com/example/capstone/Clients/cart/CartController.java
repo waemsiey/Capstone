@@ -14,7 +14,7 @@ public class CartController {
    @GetMapping("/cart")
     public String viewCart(Model model){
         model.addAttribute("user", new users());
-        return "cart";
+        return "Client/cart";
     }
     
 }

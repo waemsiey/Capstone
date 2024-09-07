@@ -1,4 +1,7 @@
 {
     "liveServer.settings.multiRootWorkspaceName": "capstone",
-    "livePreview.defaultPreviewPath": "/capstone/src/main/resources/templates/home.html"
+    "livePreview.defaultPreviewPath": "/capstone/src/main/resources/templates/home.html",
+    "cSpell.words": [
+        "navbarfragment"
+    ]
 }
