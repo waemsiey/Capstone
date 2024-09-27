@@ -6,19 +6,23 @@ if (menuu) {
     navList.classList.toggle("open");
   });
 }
-
-// // Popup
-// const popup = document.querySelector(".popup");
-// const closePopup = document.querySelector(".popup-close");
-
-// if (popup) {
-//   closePopup.addEventListener("click", () => {
-//     popup.classList.add("hide-popup");
-//   });
-
-//   window.addEventListener("load", () => {
-//     setTimeout(() => {
-//       popup.classList.remove("hide-popup");
-//     }, 1000);
-//   });
-// }
+let cardSlideIndex = 0;
+showSlides();
+function showSlides(){
+    let i;
+    let slides = document.getElementsByClassName("slider");
+    let progressDots = document.getElementsByClassName("progress");
+    for (i = 0; i<slides.length; i++){
+        slides[i].style.display ="none";
+    }
+    cardSlideIndex++;
+    if (cardSlideIndex > slides.length){
+        cardSlideIndex = 1
+    }
+    for (i = 0 ; i < progressDots.length ; i++){
+        progressDots[i].className = progressDots[i].className.replace("active","");
+    }
+    slides[cardSlideIndex-1].style.display = "block";
+    progressDots[cardSlideIndex-1].className +=" active";
+    setTimeout(showSlides,3000); //for 3 seconds changing of card images
+  }

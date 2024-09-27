@@ -3,6 +3,8 @@ package com.example.capstone.Admin.adminProducts;
 import java.io.IOException;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 @RequestMapping("/admin/products")
 public class productController {
-
+    private static final Logger logger = LoggerFactory.getLogger(productController.class);
     private final productService productService;
 
     @Autowired
@@ -27,25 +29,29 @@ public class productController {
 
     @GetMapping
     public String listProducts(Model model) {
+        logger.info("Listing all products");
         model.addAttribute("products", productService.getAllProducts());
         return "Admin/product/view";
     }
 
     @GetMapping("/new")
     public String showCreateForm(Model model) {
+        logger.info("Showing form to create a new product");
+        products newProduct = new products();
+        logger.info("New Product Object: {}", newProduct);
         model.addAttribute("product", new products());
-        return "Admin/product/create";
+        return "Admin/adminpage";
     }
 
    @PostMapping
     public String saveProduct(@ModelAttribute products product, @RequestParam("imageFile") MultipartFile imageFile) {
+        logger.info("Saving new product: {}", product);
         try {
             productService.addNewProduct(product, imageFile);
         } catch (IOException e) {
             e.printStackTrace();
-            // Handle the exception, maybe add a message to the model or redirect to an error page
         }
-        return "redirect:/admin/products";
+        return "Admin/adminpage";
     }
 
 

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:href="@{/css/styles.css}" rel="stylesheet" />
+    <link th:href="@{https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css}" rel="stylesheet" />
+    <title>Document</title>
+    <style>
+        .customize-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .shirt-container {
+            height: 500px;
+            width: 400px;
+            background-color: rgb(234, 181, 125);
+            background-image: url("/images/photo-1.png");
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            background-size: cover;
+            position: relative;
+        }
+
+        #canvas {
+            border: 1px dotted grey;
+            top: 20px;
+            width: 150px;
+            height: 150px;
+            margin: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div th:fragment="header" th:insert="~{Client/navbarfragment :: header}"></div>
+    <h1>Customize Shirt</h1>
+    <div class="customize-container">
+        <div class="shirt-container">
+            <canvas id="canvas"></canvas>
+        </div>
+
+        <div class="buttons">
+            <label for="pen-color">Select Pen Color</label>
+            <input type="color" id="pen-color" value="#000000" title="Select Pen Color">
+            <label for="text-color">Select Text Color</label>
+            <input type="color" id="text-color" value="#000000" title="Select Text Color">
+            <button id="undo-btn">undo</button>
+            <button id="delete-btn">delete</button>
+            <button id="pen-btn">switch to select</button>
+            <button id="text-btn">add text</button>
+            <input type="file" id="upload-btn" accept="image/*" />
+            
+            <!-- canvas size -->
+            <label for="canvasSize">Canvas Size:</label>
+            <select id="canvasSize">
+                <option value="150x150">Pocket Size (3x3)</option>
+                <option value="300x400">A4 Size</option>
+                <option value="420x594">A3 Size</option>
+            </select>
+            
+            <label for="fontStyle">Font Style:</label>
+            <select id="fontStyle">
+                <option value="">Select a font</option>
+              
+            </select>
+        </div>
+
+        <div id="fontContainer">
+           
+        </div>
+    </div>
+
+    <script th:src="@{/js/fabric.js}"></script>
+    <script th:src="@{/js/fabricscript.js}"></script>
+</body>
+
+</html>

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.capstone.Admin.adminProducts.productService;
@@ -30,7 +29,7 @@ public class ClientproductController {
         return "Client/products";
     }
     
-    @PostMapping("/product/{id}")
+    @GetMapping("/product/{id}")
     public String getProduct(@PathVariable String id, Model model) {
         Optional<products> productOpt = productService.getProductById(id);
         if (productOpt.isPresent()) {

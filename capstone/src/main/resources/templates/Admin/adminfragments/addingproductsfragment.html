@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Products</title>
+
+</head>
+
+<body>
+    <div th:fragment="addProductsFormfragment">
+        <h1>Add Products</h1>
+
+        <div class="add-prod-container">
+
+            <div class="prod-container">
+                <div class="box">
+                    <h3>Basic Information</h3>
+                    <form th:action="@{/admin/products}" th:object="${product}" method="post"
+                        enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="prodName">Product Name:</label>
+                            <input type="text" id="prodName" th:field="*{prodName}" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="prodDescription">Product Description:</label>
+                            <textarea id="prodDescription" th:field="*{prodDescription}" required></textarea>
+                        </div>
+
+                        <div class="form-group-prod">
+                            <label for="category">Category:</label>
+                            <select id="category" th:field="*{category}" required>
+                                <option value=""></option>
+                                <option value="t-shirt">T-shirt</option>
+                                <option value="v-neck">V Neck Shirt</option>
+                                <option value="polo-shirt">Polo shirt</option>
+                                <option value="long-sleeve">Long Sleeves</option>
+                                <option value="s-totebag">Tote Bag</option>
+                                <option value="s-mugs">Mugs</option>
+                            </select>
+                        </div>
+                </div>
+
+                <div class="box">
+                    <div class="form-group-image">
+                        <label for="imageFile">Product Image:</label>
+                        <input type="file" id="imageFile" name="imageFile" />
+                    </div>
+                </div>
+
+                <div class="box">
+                    <h3>Product Variant</h3>
+                    <div class="product-variant">
+                        <div class="variant-box">
+                            <label for="size">Size</label>
+                            <input type="text" id="size" name="size" />
+                        </div>
+                        <div class="variant-box">
+                            <label for="price">Price</label>
+                            <input type="text" id="price" name="price" />
+                        </div>
+                        <div class="variant-box">
+                            <label for="quantity">Quantity</label>
+                            <input type="text" id="quantity" name="quantity" />
+                        </div>
+                    </div>
+                    </form>
+                </div>
+
+                <div class="box">
+                    <h3>Supported Printing Type</h3>
+                    <div class="supported-printing-type">
+                        <div class="variant-box">
+                            <input type="button" id="dtf" name="printingType" value="dtf" />
+                            <label for="dtf">DTF Process</label>
+                        </div>
+                        <div class="variant-box">
+                            <input type="button" id="digital" name="printingType" value="digital" />
+                            <label for="digital">Digital Print</label>
+                        </div>
+                        <div class="variant-box">
+                            <input type="button" id="sublimation" name="printingType" value="sublimation" />
+                            <label for="sublimation">Sublimation</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="box">
+                        <h3>Product Design Setup</h3>
+                        <div class="product-design">
+                            <div class="design-box">
+                                <p>Front</p>
+                                <label for="frontImage">Click to upload or drag and drop</label>
+                                <input type="file" id="frontImage" name="frontImage" />
+                            </div>
+                            <div class="design-box">
+                                <p>Back</p>
+                                <label for="backImage">Click to upload or drag and drop</label>
+                                <input type="file" id="backImage" name="backImage" />
+                            </div>
+                            <div class="design-box">
+                                <p>Right Sleeve</p>
+                                <label for="rightSleeveImage">Click to upload or drag and drop</label>
+                                <input type="file" id="rightSleeveImage" name="rightSleeveImage" />
+                            </div>
+                            <div class="design-box">
+                                <p>Left Sleeve</p>
+                                <label for="leftSleeveImage">Click to upload or drag and drop</label>
+                                <input type="file" id="leftSleeveImage" name="leftSleeveImage" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="buttons">
+                <button type="reset">Discard</button>
+                <button type="submit">Add Product</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
