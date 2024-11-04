@@ -20,19 +20,23 @@
     <!-- Login -->
     <div class="container">
       <div class="login-form">
-        <form th:action="@{/login}" method="post">
+        <form th:action="@{/client/login}" method="post">
           <h1>Login</h1>
           <p>
             Already have an account? Login in or
-            <a th:href="@{/signup}">Sign Up</a>
+            <a th:href="@{/client/signup}">Sign Up</a>
           </p>
 
           <label for="email">Email</label>
-          <input type="text" placeholder="Enter Email" name="email" required />
+          <input type="text"
+                 id="email" 
+                 placeholder="Enter Email" 
+                 name="email" required />
 
           <label for="password">Password</label>
           <input
             type="password"
+            id="password"
             placeholder="Enter Password"
             name="password"
             required
@@ -47,7 +51,7 @@
             />
             Remember me
           </label>
-
+          <p th:if="${message}" class="error-msg" th:text="${message}"></p> 
           <p>
             By creating an account you agree to our
             <a href="#">Terms & Privacy</a>.

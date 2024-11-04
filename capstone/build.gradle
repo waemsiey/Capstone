@@ -23,6 +23,9 @@ ext {
 }
 
 dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
 	implementation 'org.springframework.boot:spring-boot-starter-freemarker'
@@ -35,15 +38,24 @@ dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-function-web'
 	implementation 'org.springframework.cloud:spring-cloud-starter-task'
 	implementation 'org.springframework.session:spring-session-core'
-	runtimeOnly 'org.postgresql:postgresql'
+
+//forTesting
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.2.RELEASE'
+	testImplementation 'org.springframework.security:spring-security-test'
+
+	runtimeOnly 'mysql:mysql-connector-java:8.0.28'
+
+
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	
+	
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework:spring-webflux'
 	testImplementation 'org.springframework.graphql:spring-graphql-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	testImplementation 'org.mockito:mockito-core'
+
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	
-	// implementation 'org.springframework.boot:spring-boot-starter-security'
-
 	implementation 'com.cloudinary:cloudinary-http44:1.32.0'
 }
 
@@ -53,16 +65,16 @@ dependencyManagement {
 	}
 }
 
-generateJava {
-	schemaPaths = ["${projectDir}/src/main/resources/graphql-client"]
-	packageName = 'com.example.capstone.codegen'
-	generateClient = true
-}
+// generateJava {
+// 	schemaPaths = ["${projectDir}/src/main/resources/graphql-client"]
+// 	packageName = 'com.example.capstone.codegen'
+// 	generateClient = true
+// }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
 
-tasks.withType(JavaCompile) {
-    options.compilerArgs << '-parameters'
+tasks.withType(JavaCompile).configureEach {
+	options.compilerArgs << '-parameters'
 }

@@ -8,7 +8,7 @@
 
   <!-- Boxicons -->
   <link th:href="@{https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css}" rel="stylesheet" />
-
+  <link th:href="@{.js/index.js}"/>
   <link th:href="@{/css/styles.css}" rel="stylesheet" />
   <title>ENY Prints | Online</title>
 
@@ -18,22 +18,45 @@
 
 <body>
   <!-- top nav -->
+
   <div th:fragment="header" th:insert="~{Client/navbarfragment :: header}"></div>
   <div class="product-container">
-    <h1 th:text="${product.prodName}">Product Name</h1>
-    <div class="prodImg-gallery">
-      <img th:src="${product.imgURL}" alt="Product Image" class="main-prod-img">
-      <!-- <div class="prodImge-sides">
-        <img th:src="${product.backImgURL}" alt="Back View" class="side-image">
-          <img th:src="${product.sleeveImgURL}" alt="Sleeve View" class="side-image">
-      </div> -->
-    </div> 
-    <p th:text="${product.prodDescription}">Product Description</p>
-    <!-- <p th:text="${product.price}">Price</p> -->
-    <p th:text="${product.category}">Category</p>
-    <a href="/home">Back to Home</a>
-  </div>
 
+    <!-- Product Image -->
+    <div class="prodImg-gallery">
+      <h1 th:text="${product.prodName}">Product Name</h1>
+      <img th:src="${product.imgURL}" alt="Product Image" class="main-prod-img">
+    </div>
+
+    <!-- Variant Options and Buttons -->
+    <div class="product-details">
+      <p th:text="${product.prodDescription}">Product Description</p>
+      <div th:if="${product.inventoryList != null}" th:each="inventory : ${product.inventoryList}">
+        <div class="variant-options">
+            <label>Size:</label>
+            <select id="size" th:attr="onchange='updatePrice(this)'">
+                <option th:each="sizeVariant : ${inventory.sizeVariants}" 
+                        th:value="${sizeVariant.size}" 
+                        th:text="${sizeVariant.size}">Size</option>
+            </select>
+            <br>
+            <label>Color:</label>
+            <select id="color" th:attr="onchange='updatePrice(this)'">
+                <option th:each="color : ${inventory.color}" 
+                        th:value="${color}" 
+                        th:text="${color}">Color</option>
+            </select>
+        </div>
+        <span th:text="${inventory.price}">Price</span>
+    </div>
+      <!-- Action Buttons -->
+      <div class="product-actions">
+        <a class="btn btn-primary" th:href="@{/design/${product.sku}(imageUrl=${product.imgURL})}">Start Designing</a>
+        <a class="btn btn-secondary" th:href="@{/cart/add/${product.id}}">Add to Cart</a>
+      </div>
+
+    </div>
+  </div>
 </body>
 
 </html>

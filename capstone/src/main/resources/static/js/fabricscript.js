@@ -1,12 +1,23 @@
 document.addEventListener('DOMContentLoaded', function () {
     console.log('This is samplefabric.html');
 
+    const urlParams = new URLSearchParams(window.location.search);
+    const imageUrl = urlParams.get('imageUrl');
+
+    if (imageUrl) {
+        const canvasContainer = document.querySelector('.canvas-container');
+        canvasContainer.style.backgroundImage = `url(${imageUrl})`;
+    }
+
     const canvas = new fabric.Canvas('canvas', {
         width: 150,
         height: 150,
         borderColor: 'black',
         isDrawingMode: true
     });
+
+    // Keep the canvas background empty
+    canvas.setBackgroundImage(null);
 
     // Change Canvas Size
     document.getElementById('canvasSize').addEventListener('change', function () {
@@ -25,6 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function saveCanvasState() {
         const json = canvas.toJSON();
+        canvasStates = canvasStates.slice(0, currentStateIndex + 1);
         canvasStates.push(json);
         currentStateIndex++;
     }
@@ -32,22 +44,39 @@ document.addEventListener('DOMContentLoaded', function () {
     canvas.on('object:added', function () {
         saveCanvasState();
     });
-
-        async function fetchFonts() {
-            const response = await fetch(`https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyDII-VFDCnoxx63gsYtFW7X0O8GhN8DxUU`);
-            const data = await response.json();
-            return data.items; // Return the list of font items
+// Undo Functionality
+    document.getElementById('undo-btn').addEventListener('click', function () {
+        if (currentStateIndex > 0) {
+            currentStateIndex--;
+            canvas.loadFromJSON(canvasStates[currentStateIndex], canvas.renderAll.bind(canvas));
         }
+    });
 
-        fetchFonts().then(fonts => {
-            const fontSelect = document.getElementById("fontStyle");
-            fonts.forEach(font => {
-                const option = document.createElement("option");
-                option.value = font.family;
-                option.textContent = font.family;
-                fontSelect.appendChild(option);
-            });
+// Delete Selected Object Functionality
+    document.getElementById('delete-btn').addEventListener('click', function () {
+    const activeObject = canvas.getActiveObject();
+        if (activeObject) {
+            canvas.remove(activeObject);
+            saveCanvasState(); // Save state after deletion
+        }
+    });
+    // Fetch Fonts
+    async function fetchFonts() {
+        const response = await fetch(`https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyDII-VFDCnoxx63gsYtFW7X0O8GhN8DxUU`);
+        const data = await response.json();
+        return data.items; // Return the list of font items
+    }
+
+    fetchFonts().then(fonts => {
+        const fontSelect = document.getElementById("fontStyle");
+        fonts.forEach(font => {
+            const option = document.createElement("option");
+            option.value = font.family;
+            option.textContent = font.family;
+            fontSelect.appendChild(option);
         });
+    });
+
     // Load Font
     function loadFont(fontName) {
         const link = document.createElement('link');
@@ -71,10 +100,10 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('text-btn').addEventListener('click', function () {
         const selectedFont = document.getElementById('fontStyle').value;
 
-        const text = new fabric.IText('Your custom text', { //Itext for edit the text itself (Interactive )
+        const text = new fabric.IText('Your custom text', {
             left: 50,
             top: 50,
-            fill: document.getElementById('text-color').value || '#000', // Fixed ID
+            fill: document.getElementById('text-color').value || '#000',
             fontFamily: selectedFont
         });
 
@@ -104,65 +133,5 @@ document.addEventListener('DOMContentLoaded', function () {
     const penBtn = document.getElementById('pen-btn');
     penBtn.addEventListener('click', function () {
         canvas.isDrawingMode = !canvas.isDrawingMode;
-        penBtn.textContent = canvas.isDrawingMode ? 'Switch to select' : 'Switch to draw';
-    });
-
-    // Uploading Image
-    const uploadBtn = document.getElementById('upload-btn');
-    uploadBtn.addEventListener('change', function (e) {
-        const file = e.target.files[0];
-        if (file) {
-            if (!file.type.startsWith('image/')) {
-                alert('Upload an image file');
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.onload = function (event) {
-                fabric.Image.fromURL(event.target.result, function (img) {
-                    img.scaleToWidth(canvas.width);
-                    img.scaleToHeight(canvas.height);
-
-                    img.set({
-                        left: (canvas.width - img.getScaledWidth()) / 2,
-                        top: (canvas.height - img.getScaledHeight()) / 2,
-                        selectable: true
-                    });
-                    canvas.add(img);
-                    canvas.setActiveObject(img);
-                    canvas.renderAll();
-                });
-            };
-            reader.readAsDataURL(file);
-        } else {
-            alert('No file Selected');
-        }
-    });
-
-    // Undo functionality
-    const undoBtn = document.getElementById('undo-btn');
-    undoBtn.addEventListener('click', function () {
-        if (currentStateIndex > 0) {
-            currentStateIndex--;
-            const stateRestore = canvasStates[currentStateIndex];
-            canvas.loadFromJSON(stateRestore, canvas.renderAll.bind(canvas));
-        }
-    });
-
-    // Deleting Object
-    const delBtn = document.getElementById('delete-btn');
-    delBtn.addEventListener('click', function () {
-        if (canvas.isDrawingMode) {
-            canvas.isDrawingMode = false;
-        }
-
-        const activeObject = canvas.getActiveObject();
-        if (activeObject) {
-            canvas.remove(activeObject);
-            saveCanvasState();
-            canvas.renderAll();
-        } else {
-            alert("No object Selected to delete");
-        }
     });
 });

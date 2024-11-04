@@ -1,107 +1,110 @@
-  <!DOCTYPE html>
-  <html lang="en" xmlns:th="http://www.thymeleaf.org">
-    <head>
-      <meta charset="UTF-8" />
-      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-      <!-- Boxicons -->
-      <link
-        th:href="@{https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css}"
-        rel="stylesheet"
-      />
-      <!-- Custom StyleSheet -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-      <link th:href="@{/css/styles.css}" rel="stylesheet"  />
-      <title>ENY Prints | Online</title>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    </head>
-    <body>
-        <!-- Top Nav -->
-        <div th:fragment="header" th:insert="~{Client/navbarfragment :: header}"></div>
+  <!-- Boxicons -->
+  <link th:href="@{https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css}" rel="stylesheet" />
+  <!-- Custom StyleSheet -->
 
-        <div th:fragment="cardview" th:insert="~{Client/cardviewfragment :: cardview}"></div>
+  <link th:href="@{/css/styles.css}" rel="stylesheet" />
+  <title>ENY Prints | Online</title>
 
-      <!-- Categories Section -->
-      
-      <section class="section category">
-        <h2 style="text-align: center; padding-bottom: 15px;">Choose Your Style</h2>
-        <div class="cat-center">
-          
-          <form action method="post">
-            <div class="product-grid">
-                <div class="product" th:each="product : ${products}">
-                    <a th:href="@{/product/{id}(id=${product.prodID})}">
-                        <img th:src="${product.imgURL}" alt="Product Image" width="100">
-                        <h3 th:text="${product.prodName}">Product Name</h3>
-                        <p th:text="${product.prodDescription}">Product Description</p>
-                        <!-- <p th:text="${product.price}">Price</p> -->
-                        <p th:text="${product.category}">Category</p>
-                    </a>
+</head>
+
+<body>
+  <!-- Top Nav -->
+  <div th:fragment="header" th:insert="~{Client/navbarfragment :: header}"></div>
+
+  <!-- <div th:fragment="cardview" th:insert="~{Client/cardviewfragment :: cardview}"></div> -->
+
+  <!-- Categories Section -->
+
+  <section class="section category">
+    <h2 style="text-align: center; padding-bottom: 15px;">Choose Your Style</h2>
+    <div class="cat-center">
+      <form action method="post">
+        <div class="product-grid">
+          <div class="product" th:each="product : ${products}">
+            <a th:href="@{/products/{id}(id=${product.sku})}">
+              <img th:src="${product.imgURL}" alt="Product Image" width="100">
+              <h3 th:text="${product.prodName}">Product Name</h3>
+              <p th:text="${product.prodDescription}">Product Description</p>
+
+              <div th:if="${product.inventoryList != null}" >
+                <div th:each="inventory : ${product.inventoryList}">
+                <p th:text="'₱' +${inventory.price}"></p>
                 </div>
-            </div>
-        </form>
-        </div>
-
-          <div style="text-align: center; margin-top: 30px;">
-              <a th:href="@{/products}">
-                  <button type="button" class="btn btn-outline-primary custom-btn">
-                      See All Products
-                  </button>
-              </a>
-          </div>
-
-    </section>
-
-      <!-- Contact -->
-      <section class="section contact">
-        <div class="row">
-          <div class="col">
-            <h2>EXCELLENT SUPPORT</h2>
-            <p>We love our customers and they can reach us any time
-            of day we will be at your service 24/7</p>
-            <a href="" class="btn btn-1">Contact</a>
-          </div>
-          <div class="col">
-            <form action="">
-              <div>
-                <input type="email" placeholder="Email Address">
-              <a href="">Send</a>
               </div>
-            </form>
+              <p th:text="${product.category}">Category</p>
+            </a>
           </div>
         </div>
-      </section>
+      </form>
+    </div>
 
-      <!-- Footer -->
-      <footer class="footer">
-        <div class="row">
-          <div class="col d-flex">
-            <h4>INFORMATION</h4>
-            <a href="">About us</a>
-            <a href="">Contact Us</a>
-            <a href="">Term & Conditions</a>
-            <a href="">Shipping Guide</a>
+    <div style="text-align: center; margin-top: 30px;">
+      <a th:href="@{/products}">
+        <button type="button" class="btn btn-outline-primary custom-btn">
+          See All Products
+        </button>
+      </a>
+    </div>
+
+  </section>
+
+  <!-- Contact -->
+  <!-- <section class="section contact">
+    <div class="row">
+      <div class="col">
+        <h2>EXCELLENT SUPPORT</h2>
+        <p>We love our customers and they can reach us any time
+          of day we will be at your service 24/7</p>
+        <a href="" class="btn btn-1">Contact</a>
+      </div>
+      <div class="col">
+        <form action="">
+          <div>
+            <input type="email" placeholder="Email Address">
+            <a href="">Send</a>
           </div>
-          <div class="col d-flex">
-            <h4>USEFUL LINK</h4>
-            <a href="">Online Store</a>
-            <a href="">Customer Services</a>
-            <a href="">Promotion</a>
-            <a href="">Top Brands</a>
-          </div>
-          <div class="col d-flex">
-            <span><i class='bx bxl-facebook-square'></i></span>
-            <span><i class='bx bxl-instagram-alt' ></i></span>
-            <span><i class='bx bxl-github' ></i></span>
-            <span><i class='bx bxl-twitter' ></i></span>
-            <span><i class='bx bxl-pinterest' ></i></span>
-          </div>
-        </div>
-      </footer>
+        </form>
+      </div>
+    </div>
+  </section> -->
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="row">
+      <div class="col d-flex">
+        <h4>INFORMATION</h4>
+        <a href="">About us</a>
+        <a href="">Contact Us</a>
+        <a href="">Term & Conditions</a>
+        <a href="">Shipping Guide</a>
+      </div>
+      <div class="col d-flex">
+        <h4>USEFUL LINK</h4>
+        <a href="">Online Store</a>
+        <a href="">Customer Services</a>
+        <a href="">Promotion</a>
+        <a href="">Top Brands</a>
+      </div>
+      <div class="col d-flex">
+        <span><i class='bx bxl-facebook-square'></i></span>
+        <span><i class='bx bxl-instagram-alt'></i></span>
+        <span><i class='bx bxl-github'></i></span>
+        <span><i class='bx bxl-twitter'></i></span>
+        <span><i class='bx bxl-pinterest'></i></span>
+      </div>
+    </div>
+  </footer>
 
 
-    <!-- PopUp
+  <!-- PopUp
     <div class="popup hide-popup">
       <div class="popup-content">
         <div class="popup-close">
@@ -126,9 +129,9 @@
       </div>
     </div> -->
 
-    </body>
-    <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.4.1/glide.min.js}"></script>
-    <script th:src="@{/js/slider.js}"></script>
-    <script th:src="@{/js/index.js}"></script>
-  
-  </html>
+</body>
+<script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.4.1/glide.min.js}"></script>
+<script th:src="@{/js/slider.js}"></script>
+<script th:src="@{/js/index.js}"></script>
+
+</html>

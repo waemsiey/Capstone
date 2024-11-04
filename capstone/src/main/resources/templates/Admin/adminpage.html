@@ -10,7 +10,7 @@
   <link th:href="@{https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css}" rel="stylesheet" />
   <link th:href="@{/css/adminstyle.css}" rel="stylesheet" />
   <link th:href="@{/css/create-prod.css}" rel="stylesheet"/>
-
+  <script th:src="@{https://code.jquery.com/jquery-3.6.0.min.js}"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
   </style>
@@ -81,17 +81,19 @@
       <!-- end of dash -->
       <!-- Inventory Content -->
       <div class="tab-pane fade" id="v-pills-inventory" role="tabpanel" aria-labelledby="v-pills-inventory-tab">
-        Inventory Content</div>
+        <div th:fragment="inventoryListFragment" th:insert="~{Admin/adminfragments/inventoryListfragment :: inventoryListFragment(product=${product})}"></div>
+      </div>
       <!-- Orders Content -->
       <div class="tab-pane fade" id="v-pills-orders" role="tabpanel" aria-labelledby="v-pills-orders-tab">
         Orders Content</div>
       <!-- Products Content -->
       <div class="tab-pane fade" id="v-pills-products" role="tabpanel" aria-labelledby="v-pills-products-tab">
-        Products Content Goes here
+
+       <div th:fragment="productlistFragment" th:insert="~{Admin/adminfragments/productlistfragment :: productlistFragment(productRequest=${productRequest})}"></div>
       </div>
        <!-- Add Products Content -->
        <div class="tab-pane fade" id="v-pills-addProducts" role="tabpanel" aria-labelledby="v-pills-addProducts-tab">
-        <div th:fragment="addProductsFormfragment" th:insert="~{Admin/adminfragments/addingproductsfragment :: addProductsFormfragment(products=${products})}"></div>
+        <div th:fragment="addProductsFormfragment" th:insert="~{Admin/adminfragments/addingproductsfragment :: addProductsFormfragment(productRequest=${productRequest})}"></div>
       </div>
       <!-- Message Content -->
       <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">Messages

@@ -30,6 +30,7 @@ public class userService {
         return userRepository.findByEmail(email);
     }
     public void addNewUser(users user , String passwordConfirm) throws Exception { //add a newusers saved in the repository
+		user.setRole("client");
 		Optional<users> userOptional = userRepository.findByEmail(user.getEmail());
 		if(userOptional.isPresent()){
 			throw new Exception (user.getEmail() + " Already Exist"); //throws a condition if email already save in db
@@ -51,6 +52,6 @@ public class userService {
         if (userOptional.isPresent() && passwordEncoder.matches(password, userOptional.get().getPassword())) {
             return userOptional;
         }
-        return Optional.empty(); // Return empty if credentials don't match
-    }
+        return Optional.empty(); 
+	}
 }

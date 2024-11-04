@@ -446,3 +446,105 @@ body, html {
         margin: 5px 0px;
     }
 }
+/* General Styles */
+.table-container {
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-width: 1000px;
+}
+
+h1 {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Table Styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+th, td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #b5b5b5;
+  color: rgb(54, 54, 54);
+  font-weight: 600;
+}
+
+td {
+  background-color: white;
+}
+
+table input[type="checkbox"] {
+  transform: scale(1.2); /* Make the checkbox slightly larger */
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* For mobile responsiveness */
+@media (max-width: 768px) {
+  table input[type="checkbox"] {
+      transform: scale(1); /* Adjust the size on smaller screens */
+  }
+}
+.product-img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+tbody tr:hover {
+  background-color: #f2f2f2;
+}
+
+/* Button Styles */
+.btn {
+  padding: 8px 12px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 14px;
+  color: white;
+  display: inline-block;
+  margin-right: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary {
+  background-color: #007bff;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  table {
+      font-size: 14px;
+  }
+  .table-container {
+      padding: 15px;
+  }
+}

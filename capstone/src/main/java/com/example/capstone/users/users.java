@@ -1,7 +1,15 @@
 package com.example.capstone.users;
 
+import java.util.List;
+
+import com.example.capstone.model.client.BillingDetail;
+import com.example.capstone.model.client.Order;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -9,22 +17,31 @@ import jakarta.persistence.Table;
 public class users {
     @Id
     private String id;
-    private String name, email, password;
+    private String name, email, password, role;
+
+    @OneToOne
+    @JoinColumn(name = "billing_details_id")
+    private BillingDetail billigDetailes;
+
+    @OneToMany(mappedBy = "user")
+    private List<Order> orders;
 
     public users() {
     }
   //with pass constructor
-    public users(String id, String name, String email, String password) {
+    public users(String id, String name, String email, String password, String role) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
+        this.role = role;
     }
     //w/o pass constructor 
-    public users(String name, String email, String password) {
+    public users(String name, String email, String password, String role) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.password = role;
     }
   //getter setter
 
@@ -56,12 +73,19 @@ public class users {
         this.password = password;
     }
 
+    public String getRole() {
+        return role;
+    }
+    public void setRole(String role) {
+        this.role = role;
+    }
     @Override
     public String toString() {
         return "users [id=" + id +
                ", name=" + name + 
                ", email=" + email + 
-               ", password=" + password + "]";
+               ", password=" + password + 
+               ", role ="+role+ "]";
     }
 
    

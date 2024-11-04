@@ -3,9 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-        
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />    
         <!-- Boxicons -->
         <link
             th:href="@{https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css}"
@@ -20,20 +18,38 @@
     </head>
     <body>
         <div th:fragment="header" th:insert="~{Client/navbarfragment :: header}"></div>
-        
-    <form action method="post" >
+   
 
-        <div class="product-grid">
-            <div class="product" th:each="product : ${products}">
-                <a th:href ="@{/product/{id}(id= ${product.prodID})}"></a>
-                <img th:src="${product.imgURL}" alt="Product Image" width="100">
-                <h3 th:text="${product.prodName}">Product Name</h3>
-                <p th:text="${product.prodDescription}">Product Description</p>
-                <!-- <p th:text="${product.price}">Price</p> -->
-                <p th:text="${product.category}">Category</p>
+        <section class="section allproducts">
+            <div class="category-filter">
+                <a th:href="@{/products}" th:classappend="${selectedCategory == null ? 'active' : ''}" th:text="'All'">All</a>
+                <th:block th:each="cat : ${categories}">
+                    <a th:href="@{/products/category/{category}(category=${cat})}" th:classappend="${selectedCategory == cat ? 'active' : ''}" th:text="${cat} +'|'">Category</a>
+                </th:block>
             </div>
-        </div>
-    </form>
+
+            <div class="all-prod-list">
+                <form action method="post">
+                    <div class="product-grid">
+                      <div class="product" th:each="product : ${products}">
+                        <a th:href="@{/products/{id}(id=${product.sku})}">
+                          <img th:src="${product.imgURL}" alt="Product Image" width="100">
+                          <h3 th:text="${product.prodName}">Product Name</h3>
+                          <p th:text="${product.prodDescription}">Product Description</p>
+            
+                          <div th:if="${product.inventoryList != null}" >
+                            <div th:each="inventory : ${product.inventoryList}">
+                            <p th:text="'₱' +${inventory.price}"></p>
+                            </div>
+                          </div>
+                          <p th:text="${product.category}">Category</p>
+                        </a>
+                      </div>
+                    </div>
+                  </form>
+            </div>
+        </section>
+       
 
     </body>
     </html>

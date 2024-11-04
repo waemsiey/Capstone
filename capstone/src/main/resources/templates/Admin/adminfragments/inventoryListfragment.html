@@ -1,0 +1,44 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="inventoryListFragment">
+        <h1>Inventory</h1>
+        <div class="table-container">
+            <table class="inventory-table">
+                <thead>
+
+                    <tr>
+                        <th><input type="checkbox" id="selectAllInventories"></th> <!--checkbox -->
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Size</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody th:each="inventory : ${inventories}">
+                    <tr>
+                        <td><input type="checkbox" id="invntoryCheck" value="${inventory.id}"></td> <!--checkbox -->
+                        <td th:text="${inventory.products != null ? inventory.products.getSku() : 'N/A'}"></td>
+                        <td th:text="${inventory.productVariant != null ? inventory.productVariant.getPrice() : 'N/A'}"></td>
+                        <td th:text="${inventory.quantity}"></td>
+                        <!-- <td th:text="${inventory.size}"></td> -->
+                        <td th:text="${inventory.productVariant != null ? inventory.productVariant.size : 'N/A'}"></td>
+                         <td> 
+                             <ul>
+                                <li th:each="size : ${inventory.productVariant}" th:text="${size}"></li>
+                            </ul>
+                        </td>
+                        <td>
+                            <a class="btn btn-primary" th:href="@{/admin/inventory/edit/{id}(id=${inventory.id})}">Edit</a>
+                            <a class="btn btn-danger" th:href="@{/admin/inventory/archive/{id}(id=${inventory.id})}" 
+                               onclick="return confirm('Are you sure you want to archive this inventory?');">Archive</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+</body>
+
+</html>

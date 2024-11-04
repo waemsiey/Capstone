@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/")
 public class userController {
@@ -29,24 +31,26 @@ public class userController {
         this.userservice = userservice;
     }
 
+
+    //Client
     @GetMapping("/signup") //directing a form from the html
     public String register(Model model){
         model.addAttribute("user", new users());
         return "signup";
     }
 
-    @PostMapping("/signup") 
+    @PostMapping("/client/signup") 
     public String registerNewUser(
                 @ModelAttribute users user,
                 @RequestParam String passwordConfirm,
                 Model model) throws Exception {
-        
-        Optional<users> userOptional = userservice.findByEmail(user.getEmail());
+        System.out.println("Reached signup method");
         try {
             userservice.addNewUser(user, passwordConfirm);
             model.addAttribute("message", "User registered successfully!");
             return "Client/home";
         } catch (Exception e) {
+            e.printStackTrace();
             model.addAttribute("message", e.getMessage());
             return "signup";
         }
@@ -57,10 +61,15 @@ public class userController {
         return "login";
     }
 
-    @PostMapping("/login")
-    public String loginUser(@ModelAttribute users user, Model model) {
+    @PostMapping("/client/login")
+    public String loginUser(@ModelAttribute users user, Model model, HttpSession session) {
         Optional<users> loginUser = userservice.loginUser(user.getEmail(), user.getPassword());
+        String email = user.getEmail();
+        String password = user.getPassword();
+        System.out.println("Logging in with email: " + email + " and password: " + password);
+    
         if(loginUser.isPresent()){
+            session.setAttribute("loggedInUser ", loginUser.get());
             model.addAttribute("message","Login Succesfully");
             return "Client/home";
         }
@@ -106,7 +115,7 @@ public class userController {
         String password = requestBody.get("password");
         String passwordConfirm = requestBody.get("passwordConfirm");
     
-        users user = new users(name, email, password);
+        users user = new users(name, email, password, "client");
     
         try {
             userservice.addNewUser(user, passwordConfirm);

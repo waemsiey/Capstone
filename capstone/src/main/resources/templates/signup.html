@@ -19,11 +19,11 @@
     <!-- Signup container -->
     <div class="container">
       <div class="login-form">
-        <form th:action="@{/signup}" method="post">
+        <form th:action="@{/client/signup}" method="post">
           <h1>Sign Up</h1>
           <p>
             Please fill in this form to create an account. or
-            <a th:href="@{/login}">Login</a>
+            <a th:href="@{/client/login}">Login</a>
           </p>
 
           <label for="email">Email</label>
@@ -50,7 +50,7 @@
             name="passwordConfirm"
             required
           />
-          <p th:if="${message}" th:text="${message}"></p>
+          <p th:if="${message}" class="error-msg" th:text="${message}"></p> 
           <label>
             <input
               type="checkbox"

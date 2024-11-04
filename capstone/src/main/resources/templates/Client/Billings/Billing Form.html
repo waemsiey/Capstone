@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/billing-styles.css}">
+
+    <title>Billing Form</title>
+</head>
+<body>
+    <div class="container">
+        <form th:action="@{/billing}" method="post">
+            <h3 class="title">Billing Address</h3>
+
+            <div class="input-box">
+                <span>First name:</span>
+                <input type="text" th:placeholder="${billing.firstName}" th:value="${billing.firstName}">
+            </div>
+            <div class="input-box">
+                <span>Last name:</span>
+                <input type="text" th:placeholder="${billing.lastName}" th:value="${billing.lastName}">
+            </div>
+            <div class="input-box">
+                <span>Email address:</span>
+                <input type="text" th:placeholder="${billing.email}" th:value="${billing.email}">
+            </div>
+            <div class="input-box">
+                <span>Phone Number</span>
+                <input type="text" th:placeholder="${billing.phoneNumber}" th:value="${billing.phoneNumber}">
+            </div>
+            <div class="input-box">
+                <span>Street address:</span>
+                <input type="text" th:placeholder="${billing.streetAddress}" th:value="${billing.streetAddress}">
+            </div>
+            <div class="input-box">
+                <span>Address:</span>
+                <input type="text" th:placeholder="${billing.address}" th:value="${billing.address}">
+            </div>
+            <div class="input-box">
+                <span>Country:</span>
+                <select th:field="*{country}">
+                    <option th:value="" th:selected="${billing.country == null}">Select your country</option>
+                    <option th:value="ph" th:selected="${billing.country == 'ph'}">Philippines</option>
+                </select>
+            </div>
+            <div class="input-box">
+                <span>Municipality:</span>
+                <select th:field="*{municipality}">
+                    <option th:value="" th:selected="${billing.municipality == null}">Select your Municipality</option>
+                    <!-- Add Municipality as needed -->
+                </select>
+            </div>
+            <div class="input-box">
+                <span>Barangay:</span>
+                <input type="text" th:placeholder="${billing.barangay}" th:value="${billing.barangay}">
+            </div>
+            <div class="input-box">
+                <span>Postcode:</span>
+                <input type="text" th:placeholder="${billing.postcode}" th:value="${billing.postcode}">
+            </div>
+
+            <div class="checkboxes">
+                <label>
+                    <input type="checkbox" th:checked="${billing.termsAndConditions}"> I agree to the 
+                    <a th:href="@{/terms-and-conditions}">Terms & Conditions</a> of this website
+                </label>
+                <br>
+                <label>
+                    <input type="checkbox" th:checked="${billing.returnsPolicy}"> I agree to the 
+                    <a th:href="@{/returns-policy}">Returns Policy</a> of this website
+                </label>
+            </div>
+
+            <div class="submit-box">
+                <button type="submit">Proceed to shipping method</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="term" class="overlay">
+        <div class="popup">
+            <h2>Terms & Conditions</h2>
+            <a class="close" th:href="@{/}">&times;</a>
+            <div class="content">
+                Here are the terms and conditions of this website.
+            </div>
+        </div>
+    </div>
+
+    <div id="return" class="overlay">
+        <div class="popup">
+            <h2>Returns Policy</h2>
+            <a class="close" th:href="@{/}">&times;</a>
+            <div class="content">
+                Here is the returns policy of this website.
+            </div>
+        </div>
+    </div>
+</body>
+</html>

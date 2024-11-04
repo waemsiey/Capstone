@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "App",
+            "request": "launch",
+            "mainClass": "org.example.app.App",
+            "projectName": ""
+        },
+        {
+            "type": "java",
             "name": "CapstoneApplication",
             "request": "launch",
             "mainClass": "com.example.capstone.CapstoneApplication",

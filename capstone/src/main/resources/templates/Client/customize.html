@@ -15,23 +15,24 @@
             flex-direction: column;
         }
 
-        .shirt-container {
+        .canvas-container {
             height: 500px;
             width: 400px;
-            background-color: rgb(234, 181, 125);
-            background-image: url("/images/photo-1.png");
+            /* background-color: rgb(228, 232, 1);
+            background-image: url("/images/photo-1.png"); */
             justify-content: center;
             align-items: center;
             display: flex;
             background-size: cover;
-            position: relative;
+            position: center;
+            background-position: center;
         }
 
         #canvas {
             border: 1px dotted grey;
             top: 20px;
-            width: 150px;
-            height: 150px;
+            width: 300px;
+            height: 400px;
             margin: auto;
         }
     </style>
@@ -39,17 +40,31 @@
 
 <body>
     <div th:fragment="header" th:insert="~{Client/navbarfragment :: header}"></div>
+
     <h1>Customize Shirt</h1>
+
     <div class="customize-container">
-        <div class="shirt-container">
+        <!-- <label for="canvas-type">Select to customize</label>
+        <select id="canvas-type" th:field="*{category}" required>
+                    <option th:each="cat : ${categories}" th:value="${cat.categoryId}"
+                        th:text="${cat.categoryName}"></option>
+                </select> -->
+    
+        <div class="canvas-container">
             <canvas id="canvas"></canvas>
         </div>
 
         <div class="buttons">
             <label for="pen-color">Select Pen Color</label>
             <input type="color" id="pen-color" value="#000000" title="Select Pen Color">
+
             <label for="text-color">Select Text Color</label>
             <input type="color" id="text-color" value="#000000" title="Select Text Color">
+<!-- 
+            <label for="shirt-color">Change Shirt Color</label>
+            <input type="color" id="shirt-color" value="#000000" title = "Change Shirt Color"> -->
+
+
             <button id="undo-btn">undo</button>
             <button id="delete-btn">delete</button>
             <button id="pen-btn">switch to select</button>
@@ -59,7 +74,7 @@
             <!-- canvas size -->
             <label for="canvasSize">Canvas Size:</label>
             <select id="canvasSize">
-                <option value="150x150">Pocket Size (3x3)</option>
+                <option value="70x80">Pocket Size</option>
                 <option value="300x400">A4 Size</option>
                 <option value="420x594">A3 Size</option>
             </select>

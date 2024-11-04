@@ -5,7 +5,7 @@
 </head>
 <body>
     <h1>Edit Product</h1>
-    <form th:action="@{/admin/products/update/{id}(id=${product.prodID})}" th:object="${product}" method="post" enctype="multipart/form-data">
+    <form th:action="@{/admin/products/update/{id}(id=${product.sku})}" th:object="${product}" method="post" enctype="multipart/form-data">
         <label for="prodID">Product ID:</label>
         <input type="text" id="prodID" th:field="*{prodID}" readonly /><br/>
 

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Products</title>
+
+</head>
+
+<body>
+    <div th:fragment="productlistFragment">
+        <h1>Products</h1>
+        <div class="table-container">
+            <table class="product-table">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" id="selectAllProducts"></th> <!--checkbox -->
+                        <th>Image</th>
+                        <th>SKU</th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="product : ${products}">
+                        <td><input type="checkbox" id="prodCheck" value="${product.sku}"></td>  <!--checkbox -->
+                        <td>
+                            <img th:src="${product.imgURL}" alt="Product Image" class="product-img">
+                        </td>
+                        <td th:text="${product.sku}"></td>
+                        <td th:text="${product.prodName}"></td>
+                        <td th:text="${product.category}"></td>
+                        <td th:text="${product.prodDescription}"></td>
+                        <td>
+                            <a class="btn btn-primary" th:href="@{/admin/products/edit/{id}(id=${product.sku})}">Edit</a>
+                            <a class="btn btn-danger"th:href="@{/admin/products/archive/{id}(id=${product.sku})}" 
+                                onclick="return confirm('Are you sure you want to archive this product?');">Archive</a>
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+</body>
+</html>
