@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <link rel="stylesheet" th:href="@{/css/billing-styles.css}" />
+    <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css}" />
+    <title>Shipping Method</title>
+</head>
+
+<body>
+
+    <div th:fragment="header" th:insert="~{Client/navbarfragment :: header}"></div>
+    <div class="notification" th:text="${notification}"></div>
+
+    <div class="shipping-container">
+        <form class="shipping" th:action="@{/shipping}" method="post">
+            <!-- the billing id -->
+            <input type="hidden" name="billingId" th:value="${billingId}" />
+
+            <div class="section">
+                <h2>Select shipping method</h2>
+                <div class="box">
+                    <label for="jnt">
+                        <input type="radio" name="method" id="jnt" value="J&T EXPRESS DELIVERY" required>
+                        <div class="shipping-method">J&T EXPRESS DELIVERY:</div>
+                        <div class="estimate-text">(estimate date delivery) (price)</div>
+                    </label>
+                    <label for="superline">
+                        <input type="radio" name="method" id="superline" value="SUPERLINE BUS" required>
+                        <div class="shipping-method">SUPERLINE BUS:</div>
+                        <div class="estimate-text">(estimate date delivery) (price)</div>
+                    </label>
+                    <label for="pickup">
+                        <input type="radio" name="method" id="pickup" value="PICK UP" required>
+                        <div class="shipping-method">PICK UP:</div>
+                        <div class="estimate-text">(estimate date delivery) (price)</div>
+                    </label>
+                </div>
+            </div>
+        
+            <div class="section">
+                <h2>Order options</h2>
+                <label for="po-number">Customer PO number</label>
+                <input type="text" id="po-number" name="poNumber" th:value="${poNumber}" placeholder="Enter PO number">
+            </div>
+        
+            <div class="section">
+                <h2>Add instructions</h2>
+                <textarea id="instructions" name="instructions" th:text="${instructions}"
+                    placeholder="Enter any notes or instructions"></textarea>
+            </div>
+        
+            <button type="submit">Proceed to payment method</button>
+        </form>
+        
+    </div>
+
+    <script>
+   document.addEventListener("DOMContentLoaded", function () {
+    // Get today's date
+    const today = new Date();
+
+    // Function to calculate estimated delivery date in "Mon-DD-YYYY" format
+    function calculateDeliveryDate(daysToAdd) {
+        const deliveryDate = new Date(today);
+        deliveryDate.setDate(deliveryDate.getDate() + daysToAdd);
+
+        // Extract parts of the date
+        const month = deliveryDate.toLocaleString('en-US', { month: 'short' });
+        const day = String(deliveryDate.getDate()).padStart(2, '0'); // Ensures 2-digit day
+        const year = deliveryDate.getFullYear();
+
+        // Format as "Mon-DD-YYYY"
+        return `${month}-${day}-${year}`;
+    }
+
+    // Set estimated delivery dates based on shipping method
+    document.querySelectorAll('label[for="jnt"] .estimate-text')[0].innerText =
+        `Estimated Shipped by ${calculateDeliveryDate(10)} (price)`;
+    document.querySelectorAll('label[for="superline"] .estimate-text')[0].innerText =
+        `Estimated Shipped by ${calculateDeliveryDate(10)} (price)`;
+    document.querySelectorAll('label[for="pickup"] .estimate-text')[0].innerText =
+        `Estimated Pick by ${calculateDeliveryDate(7)} (price)`;
+});
+    </script>
+
+</body>
+
+</html>

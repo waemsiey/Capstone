@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <link rel="stylesheet" th:href="@{/css/billing-styles.css}" />
+    <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css}" />
+    <title>Payment Method</title>
+</head>
+<body>
+
+    <div th:fragment="header" th:insert="~{Client/navbarfragment :: header}"></div>
+    <div class="billing-container">
+       
+        <h3 class="title">Payment Method</h3>
+        <p class="note">Note: All submitted data is encrypted for secure order processing and your banking information is only saved temporarily.</p>
+    
+        <form th:action="@{/payment}" method="post" th:object="${paymentDetails}">
+            <input type="hidden" name="shippingId" th:value="${shippingId}" />
+            <div class="payment">
+                <input type="radio" id="paypal" th:field="*{paymentType}" value="PAYPAL" th:checked="${paymentDetails.paymentType == 'PAYPAL'}">
+                <label for="paypal">PayPal</label>
+                
+                <div class="sub-options sub-options-paypal">
+                    <input type="radio" th:field="*{paymentDetail}" value="paypal-dp">
+                    <label for="paypal-dp">Downpayment (40%)</label><br>
+                    <input type="radio" th:field="*{paymentDetail}" value="paypal-full">
+                    <label for="paypal-full">Full Payment</label>
+                </div>
+        
+                <input type="radio" id="gcash" th:field="*{paymentType}" value="GCASH" th:checked="${paymentDetails.paymentType == 'GCASH'}">
+                <label for="gcash">GCASH</label>
+        
+                <div class="sub-options sub-options-gcash">
+                    <input type="radio" th:field="*{paymentDetail}" value="gcash-dp">
+                    <label for="gcash-dp">Downpayment (40%)</label><br>
+                    <input type="radio" th:field="*{paymentDetail}" value="gcash-full">
+                    <label for="gcash-full">Full Payment</label>
+                </div>
+        
+                <input type="radio" id="cash" th:field="*{paymentType}" value="CASH" th:checked="${paymentDetails.paymentType == 'CASH'}">
+                <label for="cash">CASH</label>
+        
+                <div class="sub-options sub-options-cash">
+                    <input type="radio" th:field="*{paymentDetail}" value="cash-dp">
+                    <label for="cash-dp">Downpayment (40%)</label><br>
+                    <input type="radio" th:field="*{paymentDetail}" value="cash-full">
+                    <label for="cash-full">Full Payment</label>
+                </div>
+            </div>
+        
+            <div class="submit-box">
+                <button type="submit">PROCEED TO CHECK ORDER INFORMATION</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

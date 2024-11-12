@@ -20,14 +20,20 @@ public class ProductVariant {
     private String size;
     private String color;
     private double price;
+    private String printingType;    
 
 
+  
     @ManyToOne
-    @JoinColumn(name = "sku")
+    @JoinColumn(name = "product_sku")
     private Products product;
 
     @OneToMany(mappedBy = "productVariant", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
     private List<ProductInventory> productInventoryList;
+
+    public boolean isAvailable() {
+        return productInventoryList.stream().anyMatch(inventory -> inventory.getQuantity() > 0);
+    }
 
     public Products getProducts() {
         return product;
@@ -55,6 +61,21 @@ public class ProductVariant {
         this.color = color;
         this.price = price;
         this.product = product;
+    }
+    public String getPrintingType() {
+        return printingType;
+    }
+
+    public void setPrintingType(String printingType) {
+        this.printingType = printingType;
+    }
+
+    public List<ProductInventory> getProductInventoryList() {
+        return productInventoryList;
+    }
+
+    public void setProductInventoryList(List<ProductInventory> productInventoryList) {
+        this.productInventoryList = productInventoryList;
     }
 
     public String getVariantId() {

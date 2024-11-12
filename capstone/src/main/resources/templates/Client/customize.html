@@ -6,34 +6,145 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link th:href="@{/css/styles.css}" rel="stylesheet" />
     <link th:href="@{https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css}" rel="stylesheet" />
-    <title>Document</title>
+    <title>Customize Shirt</title>
     <style>
-        .customize-container {
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+
+        .sidebar {
+            background-color: #333;
+            color: white;
+            width: 250px;
+            padding: 20px;
+            position: fixed;
+            top: 100px;
+            left: 0;
+            bottom: 0;
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+
+        .sidebar h2 {
+            color: #fff;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .sidebar label {
+            color: #bbb;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+
+        .sidebar input,
+        .sidebar select,
+        .sidebar button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .sidebar button {
+            background-color: #3d8bf2;
+            color: white;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto 15px;
+        }
+
+        .sidebar button:hover {
+            background-color: #2973d1;
+        }
+
+        .image-container {
+            margin-left: 270px;
+            /* Leaves space for the sidebar */
+            flex-grow: 1;
             display: flex;
             justify-content: center;
             align-items: center;
-            flex-direction: column;
+            padding: 20px;
+            position: relative;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 600px;
+            overflow: hidden;
         }
 
         .canvas-container {
-            height: 500px;
-            width: 400px;
-            /* background-color: rgb(228, 232, 1);
-            background-image: url("/images/photo-1.png"); */
-            justify-content: center;
-            align-items: center;
             display: flex;
-            background-size: cover;
-            position: center;
-            background-position: center;
+            flex-direction: row; /* Align buttons to the left and canvas to the right */
+            align-items: flex-start;
+            position: relative;
+            width: 100%;
         }
 
-        #canvas {
-            border: 1px dotted grey;
+        .canvas-controls {
+            position: absolute;
             top: 20px;
-            width: 300px;
-            height: 400px;
-            margin: auto;
+            left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .canvas-controls button {
+            background-color: #ffd446;
+            color: white;
+            border: none;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .canvas-controls button:hover {
+            background-color: #e4bf44;
+        }
+
+        .price {
+            font-size: 24px;
+            color: #333;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                padding: 15px;
+                position: static;
+                top: auto;
+            }
+
+            .image-container {
+                margin-left: 0;
+                height: 400px;
+            }
+
+            .canvas-controls {
+                position: static;
+                left: auto;
+            }
         }
     </style>
 </head>
@@ -41,53 +152,61 @@
 <body>
     <div th:fragment="header" th:insert="~{Client/navbarfragment :: header}"></div>
 
-    <h1>Customize Shirt</h1>
+    <div class="container">
+        <div class="sidebar">
+            <h2>Shirt Customization</h2>
 
-    <div class="customize-container">
-        <!-- <label for="canvas-type">Select to customize</label>
-        <select id="canvas-type" th:field="*{category}" required>
-                    <option th:each="cat : ${categories}" th:value="${cat.categoryId}"
-                        th:text="${cat.categoryName}"></option>
-                </select> -->
-    
-        <div class="canvas-container">
-            <canvas id="canvas"></canvas>
-        </div>
-
-        <div class="buttons">
-            <label for="pen-color">Select Pen Color</label>
+            <label for="pen-color">Pen Color</label>
             <input type="color" id="pen-color" value="#000000" title="Select Pen Color">
 
-            <label for="text-color">Select Text Color</label>
+            <label for="text-color">Text Color</label>
             <input type="color" id="text-color" value="#000000" title="Select Text Color">
-<!-- 
-            <label for="shirt-color">Change Shirt Color</label>
-            <input type="color" id="shirt-color" value="#000000" title = "Change Shirt Color"> -->
 
-
-            <button id="undo-btn">undo</button>
-            <button id="delete-btn">delete</button>
-            <button id="pen-btn">switch to select</button>
-            <button id="text-btn">add text</button>
-            <input type="file" id="upload-btn" accept="image/*" />
-            
-            <!-- canvas size -->
-            <label for="canvasSize">Canvas Size:</label>
+            <label for="canvasSize">Canvas Size</label>
             <select id="canvasSize">
                 <option value="70x80">Pocket Size</option>
                 <option value="300x400">A4 Size</option>
                 <option value="420x594">A3 Size</option>
             </select>
-            
-            <label for="fontStyle">Font Style:</label>
+
+            <label for="fontStyle">Font Style</label>
             <select id="fontStyle">
                 <option value="">Select a font</option>
-              
             </select>
+            <input type="file" id="upload-btn" accept="image/*" />
+            <div id="image-preview-container">
+                <img id="image-preview" style="max-width: 150px; max-height: 150px; display: none;">
+            </div>
+            <button id="undo-btn">Undo</button>
+            <button id="delete-btn">Delete</button>
+            <button id="pen-btn">Pen Mode</button>
+            <button id="select-btn">Select Mode</button>
+            <button id="text-btn">Add Text</button>
+
+            <h3>Layers</h3>
+            <div id="layers-list">
+                <!-- Layers will be insert here from js -->
+            </div>
+
+            <!-- Display Price -->
+            <div class="price">
+                <span>Price: </span><span th:text="${product.price}">0.00</span>
+            </div>
+
         </div>
 
-        <div id="fontContainer">
-           
+        <div class="image-container" id="image-container">
+            <div class="canvas-container">
+                <!-- Canvas Controls -->
+                <div class="canvas-controls">
+                    <button id="download-btn">Download Design</button>
+                    <button id="add-to-cart-btn">Add to cart</button>
+                    <button id="checkout-btn">Order Now</button>
+                </div>
+
+                <!-- Canvas -->
+                <canvas id="canvas" width="150" height="150"></canvas>
+            </div>
         </div>
     </div>
 

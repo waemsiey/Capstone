@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Invoice</title>
+    <style>
+        /* Basic styling for the invoice */
+        .invoice-container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+        }
+        .invoice-header, .invoice-footer {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .invoice-details, .invoice-items {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .invoice-items th, .invoice-items td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice-container">
+        <div class="invoice-header">
+            <h2>Invoice</h2>
+            <p>Order Number: <span th:text="${order.orderNumber}"></span></p>
+            <p>Date: <span th:text="${order.date}"></span></p>
+        </div>
+
+        <div class="invoice-details">
+            <h4>Customer Details</h4>
+            <p>Name: <span th:text="${order.customerName}"></span></p>
+            <p>Email: <span th:text="${order.customerEmail}"></span></p>
+            <p>Address: <span th:text="${order.customerAddress}"></span></p>
+        </div>
+
+        <div class="invoice-items">
+            <h4>Order Items</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="item : ${order.items}">
+                        <td th:text="${item.productName}"></td>
+                        <td th:text="${item.quantity}"></td>
+                        <td th:text="${item.price}"></td>
+                        <td th:text="${item.price * item.quantity}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="invoice-footer">
+            <h3>Total: <span th:text="${order.total}"></span></h3>
+            <p>Thank you for your order!</p>
+        </div>
+    </div>
+</body>
+</html>

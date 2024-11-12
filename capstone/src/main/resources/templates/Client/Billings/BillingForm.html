@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/billing-styles.css}" />
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css}" />
+    <title>Billing Form</title>
+</head>
+<body>
+
+    <div th:fragment="header" th:insert="~{Client/navbarfragment :: header}"></div>
+
+    <div class="billing-container">
+        <form th:action="@{/checkout}" th:object="${billing}" method="post">
+            <h3 class="title">Billing Address</h3>
+
+            <div class="billing-input-box">
+                <label for="firstName">First name:</label>
+                <input type="text" th:field="*{firstName}" id="firstName">
+            </div>
+            <div class="billing-input-box">
+                <label for="lastName">Last name:</label>
+                <input type="text" th:field="*{lastName}" id="lastName">
+            </div>
+            <div class="billing-input-box">
+                <label for="email">Email address:</label>
+                <input type="text" th:field="*{email}" id="email">
+            </div>
+            <div class="billing-input-box">
+                <label for="phoneNumber">Phone Number:</label>
+                <input type="text" th:field="*{phoneNumber}" id="phoneNumber">
+            </div>
+            <div class="billing-input-box">
+                <label for="streetAddress">Street address:</label>
+                <input type="text" th:field="*{streetAddress}" id="streetAddress">
+            </div>
+            <div class="billing-input-box">
+                <label for="address">Address:</label>
+                <input type="text" th:field="*{address}" id="address">
+            </div>
+
+            <!-- Country: Default Philippines -->
+            <div class="billing-input-box">
+                <label for="country">Country:</label>
+                <select th:field="*{country}" id="country">
+                    <option th:value="ph" th:selected="${billing.country == 'ph'}">Philippines</option>
+                </select>
+            </div>
+
+            <!-- Region -->
+            <div class="billing-input-box">
+                <label for="region">Region:</label>
+                <select th:field="*{region}" id="region">
+                    <option th:value="0" th:selected="${billing.region == null}" disabled>Select Region</option>
+                    <option th:each="region : ${regions}" th:value="${region.region_id}" th:text="${region.region_name}"
+                            th:selected="${billing.region != null && billing.region == region.region_id}"></option>
+                </select>
+            </div>
+
+            <!-- Province -->
+            <div class="billing-input-box">
+                <label for="province">Province:</label>
+                <select th:field="*{province}" id="province">
+                    <option th:value="0" th:selected="${billing.province == null}" disabled>Select Province</option>
+                    <option th:each="province : ${provinces}" th:value="${province.province_id}" th:text="${province.province_name}"
+                            th:selected="${billing.province != null && billing.province == province.province_id}"></option>
+                </select>
+            </div>
+
+            <!-- Municipality -->
+            <div class="billing-input-box">
+                <label for="municipality">Municipality:</label>
+                <select th:field="*{municipality}" id="municipality">
+                    <option th:value="0" th:selected="${billing.municipality == null}" disabled>Select Municipality</option>
+                    <option th:each="municipality : ${municipalities}" th:value="${municipality.municipality_id}"
+                            th:text="${municipality.municipality_name}"
+                            th:selected="${billing.municipality != null && billing.municipality == municipality.municipality_id}">
+                    </option>
+                </select>
+            </div>
+
+            <!-- Barangay -->
+            <div class="billing-input-box">
+                <label for="barangay">Barangay:</label>
+                <select th:field="*{barangay}" id="barangay">
+                    <option th:value="0" th:selected="${billing.barangay == null}" disabled>Select Barangay</option>
+                    <option th:each="barangay : ${barangays}" th:value="${barangay.barangay_id}" th:text="${barangay.barangay_name}"
+                            th:selected="${billing.barangay != null && billing.barangay == barangay.barangay_id}"></option>
+                </select>
+            </div>
+
+            <div class="billing-input-box">
+                <label for="postalcode">Postcode:</label>
+                <input type="text" th:field="*{postalcode}" id="postalcode">
+            </div>
+
+            <div class="billing-checkboxes">
+                <label>
+                    <input type="checkbox" th:field="*{termsAndCondition}"> I agree to the
+                    <a th:href="@{/terms}">Terms & Conditions</a> of this website
+                </label>
+                <br>
+                <label>
+                    <input type="checkbox" th:field="*{returnPolicies}"> I agree to the
+                    <a th:href="@{/returns-policy}">Returns Policy</a> of this website
+                </label>
+            </div>
+
+            <div class="billing-submit-box">
+                <button type="submit">Proceed to shipping method</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

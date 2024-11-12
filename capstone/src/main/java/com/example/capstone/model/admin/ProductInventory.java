@@ -17,7 +17,7 @@ public class ProductInventory {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "sku") // Ensure this matches the primary key in products
+    @JoinColumn(name = "product_sku") // Ensure this matches the primary key in products
     private Products product;
 
     @ManyToOne

@@ -1,6 +1,7 @@
 package com.example.capstone.repository.admin;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +20,8 @@ public interface productRepository extends JpaRepository<Products, String> {
     List<Products> findByCategory_categoryId(String categoryId);
        @Query(value = "SELECT p FROM Products p ORDER BY p.sku ASC")
     Page<Products> findTopNproducts(Pageable pageable);
+
+    Optional<Products> findBySku(String sku);
 
 
 }

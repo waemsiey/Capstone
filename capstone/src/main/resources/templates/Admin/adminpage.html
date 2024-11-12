@@ -85,10 +85,10 @@
       </div>
       <!-- Orders Content -->
       <div class="tab-pane fade" id="v-pills-orders" role="tabpanel" aria-labelledby="v-pills-orders-tab">
-        Orders Content</div>
+        <div th:fragment="ordersListFragment" th:insert="~{Admin/adminfragments/ordersfragment :: ordersListFragment(orders=${orders})}"></div>
+      </div>
       <!-- Products Content -->
       <div class="tab-pane fade" id="v-pills-products" role="tabpanel" aria-labelledby="v-pills-products-tab">
-
        <div th:fragment="productlistFragment" th:insert="~{Admin/adminfragments/productlistfragment :: productlistFragment(productRequest=${productRequest})}"></div>
       </div>
        <!-- Add Products Content -->

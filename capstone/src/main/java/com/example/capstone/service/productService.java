@@ -79,39 +79,38 @@ public class productService {
         try {
             // Handle Image Upload
             if (imageFile != null && !imageFile.isEmpty()) {
-                var uploadResult = cloudinary.uploader().upload(imageFile.getBytes(), ObjectUtils.emptyMap());
-                String imageURL = uploadResult.get("url").toString();
-                product.setImgURL(imageURL);
+                product.setImgURL(uploadImage(imageFile)); // Modularized image upload logic
             }
 
             // Set Category and Generate SKU
             Category category = categoryRepository.findById(product.getCategory().getCategoryId())
                     .orElseThrow(() -> new IllegalArgumentException("Category not found"));
-            String categoryCode = category.getCategoryCode();
-            String sku = idGeneratorService.generateProductId(categoryCode);
-            product.setSku(sku);
             product.setCategory(category);
+            product.setSku(idGeneratorService.generateProductId(category.getCategoryCode()));
 
             // Save Product first to get an ID
             productRepository.save(product);
 
             // Add Variants to the product
             if (variants != null) {
-                for (ProductVariant variant : variants) {
-                    addVariantToProduct(product, variant);
-                }
+                variants.forEach(variant -> addVariantToProduct(product, variant));
             }
 
             // Add Inventory 
             if (inventories != null) {
-                for (ProductInventory inventory : inventories) {
-                    addInventoryToProduct(product, inventory);
-                }
+                inventories.forEach(inventory -> addInventoryToProduct(product, inventory));
             }
         } catch (Exception e) {
-            throw new RuntimeException("Failed to add new product", e); // Throw a runtime exception to trigger rollback
+            throw new RuntimeException("Failed to add new product", e); // Trigger rollback on failure
         }
+
         return product;
+    }
+
+    // Modularize image upload logic
+    private String uploadImage(MultipartFile imageFile) throws IOException {
+        var uploadResult = cloudinary.uploader().upload(imageFile.getBytes(), ObjectUtils.emptyMap());
+        return uploadResult.get("url").toString(); // Return the URL of the uploaded image
     }
 
     private void addVariantToProduct(Products product, ProductVariant variant) {
@@ -121,7 +120,7 @@ public class productService {
 
     private void addInventoryToProduct(Products product, ProductInventory inventory) {
         inventory.setProducts(product); // Set the product reference
-        inventoryRepository.save(inventory); // Save the inventory
+        inventoryRepository.save(inventory); // Save inventory
     }
 
     @Transactional
@@ -138,12 +137,10 @@ public class productService {
             // Handle image update
             try {
                 if (imageFile != null && !imageFile.isEmpty()) {
-                    var uploadResult = cloudinary.uploader().upload(imageFile.getBytes(), ObjectUtils.emptyMap());
-                    String imageURL = uploadResult.get("url").toString();
-                    existingProduct.setImgURL(imageURL);
+                    existingProduct.setImgURL(uploadImage(imageFile)); // Use modularized image upload
                 }
             } catch (Exception e) {
-                throw new RuntimeException("Failed to update product image", e); // Throw a runtime exception to trigger rollback
+                throw new RuntimeException("Failed to update product image", e); // Trigger rollback on failure
             }
 
             // Update inventories
@@ -177,5 +174,26 @@ public class productService {
         Pageable pageable = PageRequest.of(0, limit);
         Page<Products> productPage = productRepository.findTopNproducts(pageable);
         return productPage.getContent();
+    }
+
+
+    @Transactional
+    public boolean isProductAvailable(String sku) {
+        Optional<Products> productOptional = productRepository.findById(sku);
+        if (!productOptional.isPresent()) {
+            throw new IllegalArgumentException("Product not found for SKU: " + sku);
+        }
+
+        Products product = productOptional.get();
+
+        
+        for (ProductVariant variant : product.getVariants()) {
+            boolean isVariantAvailable = variant.getProductInventoryList().stream()
+                    .anyMatch(inventory -> inventory.getQuantity() > 0);
+            if (isVariantAvailable) {
+                return true; 
+            }
+        }
+        return false; // No variants with available stock
     }
 }

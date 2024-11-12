@@ -4,7 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="path/to/your/js/dashboard.js"></script>
 </head>
 
 <body>
@@ -16,110 +18,128 @@
       <section class="content">
         <div class="container-fluid">
           <main role="main" class="col-md-9 ml-sm-auto col-lg-10 my-3">
-            <div class="card-list d-flex flex wrap">
+            <div class="card-list d-flex flex-wrap">
               <div class="row flex-fill">
+
+                <!-- Sales Card with dynamic value -->
                 <div class="col-12 col-md-6 col-lg-4 col-xl-3 mb-4 d-flex">
                   <div class="card sales flex-fill">
                     <div class="title">Sales</div>
                     <i class='bx bx-line-chart'></i>
-                    <div class="value">&#8369; Sample Sales Number</div>
-                    <div class="stat"><b>Ipsum</b>Dolor</div>
+                    <div class="value" th:text="'₱ ' + ${salesAmount}"></div>
+                    <div class="stat"><b th:text="${salesStat1}"></b> <span th:text="${salesStat2}"></span></div>
                   </div>
                 </div>
+
+                <!-- Orders Card with dynamic value -->
                 <div class="col-12 col-md-6 col-lg-4 col-xl-3 mb-4 d-flex">
                   <div class="card orders flex-fill">
                     <div class="title">Orders</div>
                     <i class='bx bx-cart'></i>
-                    <div class="value">Sample Order Numbers</div>
-                    <div class="stat"><b>sample test</b>edited</div>
+                    <div class="value" th:text="${orderCount}"></div>
+                    <div class="stat"><b th:text="${orderStat1}"></b> <span th:text="${orderStat2}"></span></div>
                   </div>
                 </div>
+
+                <!-- Clients Card with dynamic value -->
                 <div class="col-12 col-md-6 col-lg-4 col-xl-3 mb-4 d-flex">
-                  <div class="card orders flex-fill">
+                  <div class="card clients flex-fill">
                     <div class="title">Clients</div>
                     <i class='bx bx-user'></i>
-                    <div class="value">Number of Clients That has order</div>
+                    <div class="value" th:text="${clientCount}"></div>
                   </div>
                 </div>
 
-                <main class="orderTbl"> Recent Order
-                  <table class="table table-hover">
-                    <tr>
-                      <th>Date</th>
-                      <th>Order No.</th>
-                      <th>Name</th>
-                      <th>Order Status</th>
-                    </tr>
-                    <tr>
-                      <td>Data 1 Date</td>
-                      <td>Data 2 Order no</td>
-                      <td>Data 3Name</td>
-                      <td>
-                        <div class="dropdown">
-                          <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            Status
-                          </button>
-                          <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Pending</a></li>
-                            <li><a class="dropdown-item" href="#">Paid</a></li>
-                            <li><a class="dropdown-item" href="#">Processing</a></li>
-                          </ul>
-                        </div>
-                      </td>
-                    </tr>
-                  </table>
-                </main>
-              </div>
-            </div>
-            <!--Calendar-->
+                <!-- Sales Chart Section -->
+                <div class="col-12 col-md-6 col-lg-4 col-xl-3 mb-4">
+                  <canvas id="salesChart"></canvas>
+                  
+                  <!-- <script>
+                    var ctx = document.getElementById('salesChart').getContext('2d');
+                    var salesChart = new Chart(ctx, {
+                      type: 'line',
+                      data: {
+                        labels: [[${salesMonths}]],  // Correct dynamic months from backend
+                        datasets: [{
+                          label: 'Sales Over Time',
+                          data: [[${salesData}]],  // Correct dynamically populate sales data
+                          borderColor: 'rgba(75, 192, 192, 1)',
+                          borderWidth: 1,
+                          fill: false
+                        }]
+                      }
+                    });
+                  </script> -->
+                </div>
 
-            <nav class="cal">
-              <div class="container">
+              </div>
+              <!-- Calendar Section -->
+              <nav class="cal">
+                <div class="container">
                   <div class="calendar">
                     <div class="calendar-header">
                       <div class="year-picker">
-                          <span class="year-change" id="pre-year">&lt;&lt;</span> <!-- Previous Year Button -->
-                          <span id="year">2020</span> <!-- This will be updated dynamically -->
-                          <span class="year-change" id="next-year">&gt;&gt;</span> <!-- Next Year Button -->
+                        <span class="year-change" id="pre-year">&lt;&lt;</span>
+                        <span id="year">2020</span>
+                        <span class="year-change" id="next-year">&gt;&gt;</span>
                       </div>
                       <div class="month-picker-container">
-                          <span class="year-change" id="pre-month">&lt;</span> <!-- Previous Month Button -->
-                          <span class="month-picker" id="month-picker">May</span> <!-- This will be updated dynamically -->
-                          <span class="year-change" id="next-month">&gt;</span> <!-- Next Month Button -->
+                        <span class="year-change" id="pre-month">&lt;</span>
+                        <span class="month-picker" id="month-picker">May</span>
+                        <span class="year-change" id="next-month">&gt;</span>
                       </div>
+                    </div>
+                    <div class="calendar-body">
+                      <div class="calendar-week-days">
+                        <div>Sun</div>
+                        <div>Mon</div>
+                        <div>Tue</div>
+                        <div>Wed</div>
+                        <div>Thu</div>
+                        <div>Fri</div>
+                        <div>Sat</div>
+                      </div>
+                      <div class="calendar-days"></div>
+                    </div>
                   </div>
-                      <div class="calendar-body">
-                          <div class="calendar-week-days">
-                              <div>Sun</div>
-                              <div>Mon</div>
-                              <div>Tue</div>
-                              <div>Wed</div>
-                              <div>Thu</div>
-                              <div>Fri</div>
-                              <div>Sat</div>
-                          </div>
-                          <div class="calendar-days"></div> <!-- This will be populated with days -->
-                      </div>
-                      <div class="calendar-footer"></div>
-                      <div class="date-time-format">
-                          <div class="day-text-format">TODAY</div>
-                          <div class="date-time-value">
-                              <div class="time-format"></div>
-                              <div class="date-format"></div>
-                          </div>
-                      </div>
-                      <div class="month-list"></div>
-                  </div>
-              </div>
-          </nav>
+                </div>
+              </nav>
+            </div>
 
+            <!-- Recent Orders Table -->
+            <main class="orderTbl">Recent Orders
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Order ID</th>
+                    <th>Status</th>
+                    <th>Client</th>
+                    <th>Billing Address</th>
+                    <th>Billing Email</th>
+                    <th>Shipping</th>
+                    <th>Payment</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr th:each="order : ${orders}">
+                    <td th:text="${order.id}"></td>
+                    <td th:text="${order.status}"></td>
+                    <td th:text="${order.billingDetail != null ? order.billingDetail.firstName : 'N/A'}"></td>
+                    <td th:text="${order.billingDetail != null ? order.billingDetail.address : 'N/A'}"></td>
+                    <td th:text="${order.billingDetail != null ? order.billingDetail.email : 'N/A'}"></td>
+                    <td th:text="${order.shippingMethod != null ? order.shippingMethod.method : 'N/A'}"></td>
+                    <td th:text="${order.paymentDetails != null ? order.paymentDetails.paymentType : 'N/A'}"></td>
+                </tr>
+                </tbody>
+              </table>
+            </main>
+
+           
           </main>
         </div>
       </section>
     </div>
   </div>
-  </script>
 </body>
 
 </html>

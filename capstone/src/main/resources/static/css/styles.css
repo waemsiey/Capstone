@@ -1152,77 +1152,113 @@ form span {
   color: #fff;
 }
 
-/* Cart Items */
-.cart {
-  margin: 10rem auto;
+/* Cart Container */
+.container.cart {
+  width: 80%;
+  margin: 2rem auto;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Table Styles */
 table {
   width: 100%;
   border-collapse: collapse;
+  margin-bottom: 20px;
 }
 
-.cart-info {
-  display: flex;
-  flex-wrap: wrap;
+th, td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
 }
 
 th {
-  text-align: left;
-  padding: 0.5rem;
-  color: #fff;
-  background-color: var(--green);
-  font-weight: normal;
+  color: #555;
+  font-weight: 600;
+  font-size: 1rem;
 }
 
-td {
-  padding: 1rem 0.5rem;
-}
-
-td input {
-  width: 5rem;
-  height: 3rem;
-  padding: 0.5rem;
-}
-
-td a {
-  color: orangered;
-  font-size: 1.4rem;
-}
-
-td img {
-  width: 8rem;
-  height: 8rem;
-  margin-right: 1rem;
-}
-
-.total-price {
+/* Cart Item Info */
+.cart-info {
   display: flex;
-  align-items: flex-end;
-  flex-direction: column;
-  margin-top: 2rem;
+  align-items: center;
+}
+
+.cart-info img {
+  width: 80px;
+  height: auto;
+  margin-right: 1rem;
+  border-radius: 4px;
+}
+
+.cart-info div p {
+  font-weight: bold;
+  color: #333;
+  margin: 0;
+  font-size: 1rem;
+}
+
+.cart-info div span {
+  color: #888;
+  font-size: 0.875rem;
+}
+
+/* Price and Action */
+.total-price {
+  float: right;
+  width: 40%;
+  border-top: 2px solid #ddd;
+  padding-top: 1.5rem;
 }
 
 .total-price table {
-  border-top: 3px solid var(--green);
   width: 100%;
-  max-width: 35rem;
+  border-top: none;
 }
 
-td:last-child {
-  text-align: right;
+.total-price td {
+  padding: 0.75rem;
+  font-size: 1.125rem;
+  color: #333;
 }
 
-th:last-child {
-  text-align: right;
+.total-price td:last-child {
+  font-weight: bold;
+  color: #333;
 }
 
+/* Checkout Button */
 .checkout {
   display: inline-block;
-  background-color: var(--green);
-  color: white;
-  padding: 1rem;
-  margin-top: 1rem;
+  background: #ff523b;
+  color: #fff;
+  padding: 0.75rem 2rem;
+  border-radius: 5px;
+  text-decoration: none;
+  text-align: center;
+  font-weight: bold;
+  margin-top: 20px;
+  transition: background 0.3s;
+}
+
+.checkout:hover {
+  background: #ff3300;
+}
+
+/* Remove Link */
+.remove-link {
+  color: #ff523b;
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.remove-link:hover {
+  color: #ff3300;
 }
 
 @media only screen and (max-width: 567px) {

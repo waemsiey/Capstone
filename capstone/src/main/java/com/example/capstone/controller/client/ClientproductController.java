@@ -35,19 +35,23 @@ public class ClientproductController {
         return "Client/products";
     }
     
-    @GetMapping("/products/{id}")
-    public String getProduct(@PathVariable String id, Model model) {
-        System.out.println("Fetching product with ID: " + id);
-        Optional<Products> productOpt = productService.getProductById(id);
-        if (productOpt.isPresent()) {
-            model.addAttribute("product", productOpt.get());
-            System.out.println("Product found: " + productOpt.get());
-        } else {
-            model.addAttribute("errorMessage", "Product not found");
-            System.out.println("Product not found for ID: " + id);
-        }
-        return "Client/productFullDescription";
+    @GetMapping("/products/{sku}")
+public String getProduct(@PathVariable String sku, Model model) {
+    System.out.println("Fetching product with ID: " + sku);
+    Optional<Products> productOpt = productService.getProductById(sku);
+    if (productOpt.isPresent()) {
+        Products product = productOpt.get();  // Store the product in a variable
+        model.addAttribute("product", product);
+        model.addAttribute("productVariants", product.getVariants());  
+        System.out.println("Product found: " + product);
+    } else {
+        model.addAttribute("errorMessage", "Product not found");
+        System.out.println("Product not found for ID: " + sku);
     }
+    return "Client/productFullDescription";
+}
+
+
     @GetMapping ("/products/category/{category}")
     public String getProductByCategory(@PathVariable String category, Model model) {
         List<Products> products = productService.getProductByCategory(category);

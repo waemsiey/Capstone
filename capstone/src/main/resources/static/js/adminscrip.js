@@ -213,20 +213,11 @@ function setupFormSubmission() {
 function showMessage(alertClass, message) {
   $('#message').removeClass('alert-danger alert-success').addClass(alertClass).text(message).show(); // Update message display
 }
-
 // For Variant Values Section where adding new variant field places
 const columnNames = ["Size", "Color", "Printing Type"];
 const addBtn = document.querySelector(".add");
 const inputContainer = document.querySelector(".variant-group");
 const displayedOptions = document.querySelector(".display-options");
-
-async function fetchColors() {
-    const response = await fetch('colors.JSON'); // Adjust path if necessary
-    if (!response.ok) {
-        throw new Error('Network response was not ok');
-    }
-    return response.json();
-}
 
 // Function to remove the input group with a confirmation prompt
 function removeInput() {
@@ -336,7 +327,7 @@ function createOptionDisplay(optionName, optionValues) {
 }
 
 // Function to create input fields for new options or editing existing ones
-async function addInput(existingName = "", existingValues = []) {
+function addInput(existingName = "", existingValues = []) {
     const valueLabel = document.createElement("label");
     valueLabel.textContent = "Option Values";
 
@@ -405,19 +396,10 @@ async function addInput(existingName = "", existingValues = []) {
     inputContainer.appendChild(flex);
 
     // Add event listener to update the placeholder on option change
-    optionSelect.addEventListener("change", async function () {
+    optionSelect.addEventListener("change", function () {
         const inputs = labelInputContainer.querySelectorAll("input[type='text']");
         const placeholderText = `(e.g. '${optionSelect.value === "Size" ? "Large" : optionSelect.value === "Color" ? "Red" : "Screen Printing"}')`;
         inputs.forEach(input => input.placeholder = placeholderText);
-
-        // If the selected option is "Color", fetch and populate color options
-        if (optionSelect.value === "Color") {
-            const colors = await fetchColors();
-            // Clear previous inputs
-            inputs.forEach(input => input.remove());
-            colors.forEach(color => addNewValueInput(color)); // Add color options as input fields
-            addNewValueInput(); // Add an empty input for new values
-        }
     });
 
     return flex;

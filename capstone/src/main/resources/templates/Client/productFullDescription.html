@@ -5,58 +5,275 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <!-- Boxicons -->
   <link th:href="@{https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css}" rel="stylesheet" />
-  <link th:href="@{.js/index.js}"/>
   <link th:href="@{/css/styles.css}" rel="stylesheet" />
   <title>ENY Prints | Online</title>
+  <style>
+    /* Style for variant buttons */
+    .variant-btn {
+      display: inline-block;
+      padding: 10px 20px;
+      margin: 5px;
+      background-color: #f1f1f1;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s, transform 0.3s;
+    }
 
-</head>
+    /* Hover effect for buttons */
+    .variant-btn:hover {
+      background-color: #909090;
+      transform: scale(1.05);
+    }
 
+    /* Active button state when selected */
+    .variant-btn.selected {
+      background-color: #b1b1b1;
+      color: white;
+      border-color: #f3db2a;
+    }
+
+    /* Disabled button state */
+    .variant-btn[disabled] {
+      background-color: #e0e0e0;
+      cursor: not-allowed;
+    }
+
+    /* Style for the price display */
+    .price {
+      font-size: 1.5em;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    /* Style for size and color buttons section */
+    .variant-options {
+      margin-bottom: 20px;
+    }
+
+    /* Make sure buttons are inline and wrap */
+    .size-options,
+    .color-options {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    /* CSS for Quantity Section */
+    .quantity-container {
+      margin: 20px 0;
+      font-size: 1em;
+      display: flex;
+      align-items: center;
+    }
+
+    .quantity-container label {
+      margin-right: 10px;
+    }
+
+    .quantity-controls {
+      display: flex;
+      align-items: center;
+    }
+
+    .quantity-btn {
+      width: 30px;
+      height: 30px;
+      background-color: #f1f1f1;
+      border: 1px solid #ddd;
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    .quantity-btn:hover {
+      background-color: #b1b1b1;
+    }
+
+    #quantityInput {
+      width: 40px;
+      text-align: center;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin: 0 5px;
+      font-size: 16px;
+    }
+  </style>
 </head>
 
 <body>
-  <!-- top nav -->
-
+  <!-- Top Navigation -->
   <div th:fragment="header" th:insert="~{Client/navbarfragment :: header}"></div>
-  <div class="product-container">
 
-    <!-- Product Image -->
+  <div class="product-container">
+    <!-- Product Image and Name -->
     <div class="prodImg-gallery">
       <h1 th:text="${product.prodName}">Product Name</h1>
-      <img th:src="${product.imgURL}" alt="Product Image" class="main-prod-img">
+      <img th:src="@{${product.imgURL}}" alt="Product Image" class="main-prod-img">
     </div>
 
-    <!-- Variant Options and Buttons -->
+    <!-- Product Details and Variants -->
     <div class="product-details">
       <p th:text="${product.prodDescription}">Product Description</p>
-      <div th:if="${product.inventoryList != null}" th:each="inventory : ${product.inventoryList}">
-        <div class="variant-options">
-            <label>Size:</label>
-            <select id="size" th:attr="onchange='updatePrice(this)'">
-                <option th:each="sizeVariant : ${inventory.sizeVariants}" 
-                        th:value="${sizeVariant.size}" 
-                        th:text="${sizeVariant.size}">Size</option>
-            </select>
-            <br>
-            <label>Color:</label>
-            <select id="color" th:attr="onchange='updatePrice(this)'">
-                <option th:each="color : ${inventory.color}" 
-                        th:value="${color}" 
-                        th:text="${color}">Color</option>
-            </select>
+
+      <!-- Variant Options -->
+      <div class="variant-options">
+        <div>
+          <label for="size">Size:</label>
+          <div id="size" class="size-options">
+            <button th:each="variant : ${product.variants}" th:data-size="${variant.size}"
+              th:data-price="${variant.price}" th:text="${variant.size}" class="variant-btn size-btn"
+              onclick="updatePrice(this)">
+              <span th:text="${variant.size}"></span>
+            </button>
+          </div>
         </div>
-        <span th:text="${inventory.price}">Price</span>
-    </div>
+
+        <div>
+          <label for="color">Color:</label>
+          <div id="color" class="color-options">
+            <button th:each="variant : ${product.variants}" th:data-color="${variant.color}"
+              th:data-size="${variant.size}" th:data-price="${variant.price}" th:text="${variant.color}"
+              class="variant-btn color-btn" onclick="updatePrice(this)">
+              <span th:text="${variant.color}"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Price Display -->
+      <div class="price">
+        <span>Price: <span id="price">Select size and color</span></span>
+      </div>
+
+      <div class="quantity-container">
+        <label for="quantity">Quantity:</label>
+        <div class="quantity-controls">
+          <button type="button" onclick="changeQuantity(-1)" class="quantity-btn">-</button>
+          <input type="number" name="quantity" id="quantityInput" value="1" min="1" step="1">
+          <button type="button" onclick="changeQuantity(1)" class="quantity-btn">+</button>
+        </div>
+      </div>
+
       <!-- Action Buttons -->
       <div class="product-actions">
         <a class="btn btn-primary" th:href="@{/design/${product.sku}(imageUrl=${product.imgURL})}">Start Designing</a>
-        <a class="btn btn-secondary" th:href="@{/cart/add/${product.id}}">Add to Cart</a>
-      </div>
 
+        <!-- Add to Cart Form -->
+        <form th:action="@{/add/{sku}(sku=${product.sku})}" method="get" onsubmit="return validateAndSubmitForm()">
+          <!-- Hidden Inputs for Size and Color -->
+          <input type="hidden" name="size" id="sizeInput">
+          <input type="hidden" name="color" id="colorInput">
+          <input type="hidden" name="price" id="priceInput">
+          <input type="hidden" name="quantity" id="quantityInputForm">
+    
+          <button type="submit" class="btn btn-secondary">Add to Cart</button>
+        </form>
+      </div>
     </div>
   </div>
+
+  <script>
+    let selectedSize = null;
+    let selectedColor = null;
+    let selectedPrice  = null;
+
+    // Function to update the price and available options
+    function updatePrice(element) {
+      const priceElement = document.getElementById("price");
+
+      if (element.classList.contains("size-btn")) {
+        if (selectedSize === element.getAttribute("data-size")) {
+          selectedSize = null;
+          toggleSelectedButton(element, "size", false);
+          updateColorOptions(); // Re-enable all colors
+        } else {
+          selectedSize = element.getAttribute("data-size");
+          toggleSelectedButton(element, "size", true);
+          updateColorOptions();
+        }
+      } else if (element.classList.contains("color-btn")) {
+        if (selectedColor === element.getAttribute("data-color")) {
+          selectedColor = null;
+          toggleSelectedButton(element, "color", false);
+          updateSizeOptions();
+        } else {
+          selectedColor = element.getAttribute("data-color");
+          toggleSelectedButton(element, "color", true);
+          updateSizeOptions();
+        }
+      }
+
+      selectedPrice = element.getAttribute("data-price");
+      priceElement.textContent = selectedPrice ? `₱ ${selectedPrice}` : "Select size and color";
+
+      console.log("Selected Size:", selectedSize);
+      console.log("Selected Color:", selectedColor);
+      console.log("Price:", selectedPrice);
+    }
+
+    // Function to toggle selected state for buttons
+    function toggleSelectedButton(element, type, isSelected) {
+      const buttons = document.querySelectorAll(`.${type}-btn`);
+      buttons.forEach(button => {
+        if (button === element) {
+          button.classList.toggle("selected", isSelected);
+        } else {
+          button.classList.remove("selected");
+        }
+      });
+    }
+
+    // Function to update the available color options based on the selected size
+    function updateColorOptions() {
+      const colorButtons = document.querySelectorAll('.color-btn');
+      colorButtons.forEach(button => {
+        const isAvailable = selectedSize === null || button.getAttribute('data-size') === selectedSize;
+        button.disabled = !isAvailable;
+      });
+    }
+
+    // Function to update the available size options based on the selected color
+    function updateSizeOptions() {
+      const sizeButtons = document.querySelectorAll('.size-btn');
+      sizeButtons.forEach(button => {
+        const isAvailable = selectedColor === null || button.getAttribute('data-color') === selectedColor;
+        button.disabled = !isAvailable;
+      });
+    }
+
+    
+    function changeQuantity(amount) {
+    const quantityInput = document.getElementById("quantityInput");
+    let currentQuantity = parseInt(quantityInput.value);
+    if (currentQuantity + amount > 0) { // Prevent quantity from going below 1
+      quantityInput.value = currentQuantity + amount;
+    }
+  }
+    // Validate and submit the form with selected size and color
+    function validateAndSubmitForm() {
+      if (!selectedSize || !selectedColor) {
+        alert("Please select both size and color before adding to the cart.");
+        return false;
+      }
+
+      document.getElementById("sizeInput").value = selectedSize;
+      document.getElementById("colorInput").value = selectedColor;
+      document.getElementById("priceInput").value = selectedPrice;
+      document.getElementById("quantityInputForm").value = document.getElementById("quantityInput").value;
+
+      return true;
+    }
+
+    // Initialize the price display
+    document.getElementById("price").textContent = "₱ 0.00";
+
+    
+  </script>
 </body>
 
 </html>

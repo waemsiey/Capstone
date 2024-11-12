@@ -46,6 +46,7 @@ public class customizationController {
     public String viewCustomize(@PathVariable String sku, Model model){
         Products product = productService.getProductById(sku).orElse(null);
         model.addAttribute("product", product);
+      
         return "Client/customize";
     }
 }

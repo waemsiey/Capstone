@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Order Confirmation</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<style>* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #ecf0f1;
+    color: #333;
+    line-height: 1.6;
+    padding: 20px;
+}
+
+/* Main Container */
+.confirmation-container {
+    background-color: white;
+    padding: 30px;
+    max-width: 800px;
+    margin: 0 auto;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+h3 {
+    font-size: 1.8rem;
+    color: #34495e;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+/* Order Summary Table */
+table {
+    width: 100%;
+    margin-bottom: 20px;
+    border-collapse: collapse;
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #edbe52;
+    color: white;
+    font-weight: bold;
+}
+
+td {
+    background-color: #ecf0f1;
+}
+
+/* Section Styling */
+div {
+    margin-bottom: 20px;
+}
+
+/* Action Buttons */
+button {
+    background-color:  #edbe16;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin: 5px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #dba334;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .confirmation-container {
+        padding: 20px;
+    }
+
+    h2 {
+        font-size: 2rem;
+    }
+
+    h3 {
+        font-size: 1.6rem;
+    }
+
+    table th, table td {
+        padding: 8px;
+    }
+
+    button {
+        font-size: 0.9rem;
+        padding: 8px 16px;
+    }
+}</style>
+<body>
+
+    <div class="confirmation-container">
+        <h2>Order Confirmation</h2>
+
+        <!-- Order Summary -->
+        <div class="order-summary">
+            <h3>Your Order Summary</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Size</th>
+                        <th>Color</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="item : ${cartItems}">
+                        <td th:text="${item.product.prodName}"></td>
+                        <td th:text="${item.size}"></td>
+                        <td th:text="${item.color}"></td>
+                        <td th:text="${item.quantity}"></td>
+                        <td th:text="${item.price}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Billing Details -->
+        <div class="billing-details">
+            <h3>Billing Details</h3>
+            <p th:text="'Name: ' + ${billingDetail.firstName}"></p>
+            <p th:text="'Address: ' + ${billingDetail.address}"></p>
+            <p th:text="'City: ' + ${billingDetail.municipality}"></p>
+            <p th:text="'Phone: ' + ${billingDetail.phoneNumber}"></p>
+        </div>
+
+        <!-- Shipping Method -->
+        <div class="shipping-method">
+            <h3>Shipping Method</h3>
+            <p th:text="'Method: ' + ${shippingMethod.method}"></p>
+            <p th:text="'Estimated Delivery Date: ' + ${shippingMethod.estimatedDeliveryDate}"></p>
+        </div>
+
+        <!-- Payment Method -->
+        <div class="payment-method">
+            <h3>Payment Method</h3>
+            <p th:text="'Payment Method: ' + ${paymentDetails.paymentType}"></p>
+            <!-- <p th:text="'Amount: ' + ${paymentDetails.amount}"></p> -->
+        </div>
+
+        <!-- Confirmation Message -->
+        <div class="confirmation-message">
+            <h3>Are you sure you want to finalize your order?</h3>
+        </div>
+
+        <!-- Adding password to user -->
+        <div th:if="${user == null}">
+            <label for="password">Set Your Password:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <form action="#" th:action="@{/finalizeOrder}" method="post">
+                <button type="submit">Confirm Order</button>
+            </form>
+            <!-- <form action="#" th:action="@{/modifyOrder(step='shipping')}" method="get">
+                <button type="submit">Modify Order</button>
+            </form> -->
+        </div>
+    </div>
+
+</body>
+
+</html>

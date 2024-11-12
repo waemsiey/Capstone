@@ -43,12 +43,12 @@ public class userController {
     public String registerNewUser(
                 @ModelAttribute users user,
                 @RequestParam String passwordConfirm,
-                Model model) throws Exception {
+                Model model, HttpSession session) throws Exception {
         System.out.println("Reached signup method");
         try {
             userservice.addNewUser(user, passwordConfirm);
             model.addAttribute("message", "User registered successfully!");
-            return "Client/home";
+            return "redirect:/home";
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("message", e.getMessage());
@@ -56,8 +56,12 @@ public class userController {
         }
     }
     @GetMapping("/login")
-    public String viewLoginpage(Model model){
+    public String viewLoginpage(@RequestParam(value = "redirect", required = false) String redirect, Model model){
         model.addAttribute("user", new users());
+        if (redirect != null) {
+            return "redirect:" + redirect;
+        }
+        
         return "login";
     }
 
@@ -69,9 +73,9 @@ public class userController {
         System.out.println("Logging in with email: " + email + " and password: " + password);
     
         if(loginUser.isPresent()){
-            session.setAttribute("loggedInUser ", loginUser.get());
+            session.setAttribute("user", loginUser.get());
             model.addAttribute("message","Login Succesfully");
-            return "Client/home";
+            return "redirect:/home";
         }
         else {
             model.addAttribute("message", "Email not found!");
@@ -93,52 +97,6 @@ public class userController {
     public String help() {
        
         return "help"; //html file
-    }
-    
-// for postmantestingusers
-    @PostMapping("/api/login")
-    @ResponseBody 
-    public ResponseEntity<String> loginUser(@RequestBody users user) {
-        Optional<users> loginUser = userservice.loginUser(user.getEmail(), user.getPassword());
-        if (loginUser.isPresent()) {
-            return ResponseEntity.ok("Login Successful");
-        } else {
-            return ResponseEntity.status(HttpStatus.SC_UNAUTHORIZED).body("Email or password is incorrect");
-        }
-    }
-
-    @PostMapping("/api/register")
-    @ResponseBody
-    public ResponseEntity<String> registerUserApi(@RequestBody Map<String, String> requestBody) {
-        String email = requestBody.get("email");
-        String name = requestBody.get("name");
-        String password = requestBody.get("password");
-        String passwordConfirm = requestBody.get("passwordConfirm");
-    
-        users user = new users(name, email, password, "client");
-    
-        try {
-            userservice.addNewUser(user, passwordConfirm);
-            return ResponseEntity.status(HttpStatus.SC_CREATED).body("User registered successfully!");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.SC_BAD_REQUEST).body(e.getMessage());
-        }
-    }
-   @RestController
-    @RequestMapping("/api")
-    public static class ApiUserController {
-        private final userService userservice;
-
-        @Autowired
-        public ApiUserController(userService userservice) {
-            this.userservice = userservice;
-        }
-
-        @GetMapping("/users")
-        public ResponseEntity<List<users>> getAllUsers() {
-            List<users> users = userservice.getUsers();
-            return ResponseEntity.ok(users);
-        }
     }
 
 }
